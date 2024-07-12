@@ -1,0 +1,16 @@
+{
+  "name": "eslint-config-custom",
+  "version": "0.0.0",
+  "main": "index.js",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "@shopify/eslint-plugin": "^42.0.3",
+    "eslint": "^8.36.0",
+    "eslint-config-next": "latest",
+    "eslint-config-prettier": "latest",
+    "eslint-config-turbo": "latest",
+    "tsconfig": "*",
+    "typescript": "^5.0.2"
+  }
+}

@@ -1,0 +1,82 @@
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/inter-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('./fonts/inter-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/inter-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/inter-regular.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/inter-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/inter-regular.svg#Inter') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  src: url('./fonts/inter-medium.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('./fonts/inter-medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/inter-medium.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/inter-medium.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/inter-medium.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/inter-medium.svg#Inter') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./fonts/inter-bold.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('./fonts/inter-bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./fonts/inter-bold.woff2') format('woff2'), /* Super Modern Browsers */
+       url('./fonts/inter-bold.woff') format('woff'), /* Modern Browsers */
+       url('./fonts/inter-bold.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('./fonts/inter-bold.svg#Inter') format('svg'); /* Legacy iOS */
+}
+
+* {
+  font-family: 'Inter';
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+
+  &:disabled {
+    pointer-events: none;
+  }
+}
+
+:root {
+  overflow-y: auto !important;
+
+  &:-webkit-full-screen-ancestor {
+    overflow-y: auto !important;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background: #fff;
+}
+
+a {
+  text-decoration: none;
+}
+
+svg {
+  display: block;
+}
+
+button {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+}

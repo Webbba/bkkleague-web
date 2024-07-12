@@ -1,0 +1,20 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint --color --ext .ts,.tsx . --no-cache",
+    "lint:fix": "eslint --fix --ext .ts,.tsx ."
+  },
+  "dependencies": {
+    "swr": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.36.0",
+    "eslint-config-custom": "*",
+    "tsconfig": "*",
+    "typescript": "^5.0.2"
+  }
+}

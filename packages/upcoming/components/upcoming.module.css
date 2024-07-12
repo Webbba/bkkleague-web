@@ -1,0 +1,134 @@
+ .today-matches {
+  padding: 0 40px;
+  border-bottom: 1px solid #c0c0c0;
+}
+ 
+ .today-matches-date {
+  margin-bottom: 36px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 52px;
+}
+
+.match-title {
+  margin: 18px 0;
+  position: relative;
+  height: 1px;
+  background: #c0c0c0;
+
+  & span {
+    position: absolute;
+    background: #fff;
+    padding: 0 40px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 36px;
+    color: #000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.matches-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-top: 44px;
+  margin-bottom: 34px;
+}
+
+.match {
+  width: calc(33% - 20px);
+  margin-right: 20px;
+  margin-bottom: 16px;
+  background: #efefef;
+  padding: 20px;
+  border-radius: 24px;
+  text-decoration: none;
+  color: #000;
+
+  &:nth-child(3n) {
+    margin-right: 0;
+  }
+}
+
+.match-top {
+  margin-bottom: 24px;
+
+  & .separator {
+    height: 1px;
+    background: #c0c0c0;
+    position: relative;
+
+    &::before {
+      content: 'VS';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 20px;
+      line-height: 30px;
+      padding: 0 12px;
+      background: #efefef;
+    }
+  }
+
+  & .match-player {
+    text-align: center;
+    font-size: 28px;
+    line-height: 36px;
+    color: #000;
+
+    &.match-player-top {
+      margin-bottom: 19px;
+    }
+   
+    &.match-player-bottom {
+      margin-top: 19px;
+    }
+  }
+}
+
+.match-score-wrapper {
+  background: #fff;
+  height: 108px;
+  border-radius: 10px;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-shadow: 0 6px 0 0 #d5d5d5;
+}
+
+.match-player-logo {
+  width: 84px;
+  height: 84px;
+
+  &.empty {
+    background: #efefef;
+    border-radius: 50%;
+  }
+
+  & .logo-image {
+    display: block;
+    object-fit: contain;
+    width: 84px;
+    height: 84px;
+  } 
+}
+
+.match-score {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: 700;
+  color: #000;
+  font-size: 44px;
+  line-height: 52px;
+}

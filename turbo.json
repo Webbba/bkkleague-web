@@ -1,0 +1,33 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**"
+      ]
+    },
+    "lint": {
+      "outputs": [],
+      "cache": false
+    },
+    "dev": {
+      "cache": false
+    },
+    "start": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
+  },
+  "globalDependencies": [
+    ".env"
+  ],
+  "globalEnv": [
+    "NEXT_PUBLIC_API_URL",
+    "NODE_ENV"
+  ]
+}

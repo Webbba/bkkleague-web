@@ -1,0 +1,38 @@
+{
+  "name": "turborepo",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "dotenv -- turbo dev --parallel",
+    "build": "dotenv -- turbo build",
+    "start": "dotenv -- turbo start --no-daemon --only --heap=./heapfile",
+    "lint": "turbo lint",
+    "turbo": "turbo",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "css-loader": "^6.7.3",
+    "dotenv-cli": "^7.1.0",
+    "eslint-config-custom": "*",
+    "eslint-plugin-import": "^2.27.5",
+    "postcss": "^8.4.21",
+    "postcss-import": "^15.1.0",
+    "postcss-preset-env": "^8.0.1",
+    "postcss-reporter": "^7.0.5",
+    "prettier": "latest",
+    "turbo": "^1.8.5",
+    "typescript-plugin-css-modules": "^4.2.3",
+    "webpack": "^5.76.2"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "packageManager": "yarn@1.22.18",
+  "dependencies": {
+    "next": "13.3"
+  }
+}
