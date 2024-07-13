@@ -29,6 +29,29 @@ function AppContent({ Component, pageProps }: AppProps) {
     }
   }, []);
 
+  events?.on('routeChangeStart', () => {
+    if (animationRequested) {
+      const body = document.getElementsByTagName('body');
+
+      if (body && body[0]) {
+        body[0].style.overflow = 'hidden';
+      }
+    }
+  });
+
+  events?.on('routeChangeComplete', () => {
+    if (animationRequested && setAnimationRequested) {
+      setAnimationRequested(false);
+      const body = document.getElementsByTagName('body');
+
+      setTimeout(() => {
+        if (body && body[0]) {
+          body[0].style.overflow = 'hidden';
+        }
+      }, 500);
+    }
+  });
+
   useEffect(() => {
     getSeasonAction();
   }, []);
