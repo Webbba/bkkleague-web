@@ -46,7 +46,7 @@ function AppContent({ Component, pageProps }: AppProps) {
 
       setTimeout(() => {
         if (body && body[0]) {
-          body[0].style.overflow = 'hidden';
+          body[0].style.overflow = 'initial';
         }
       }, 500);
     }

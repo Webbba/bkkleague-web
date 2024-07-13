@@ -31,6 +31,9 @@
   flex-wrap: wrap;
   margin-bottom: 60px;
   border-bottom: 1px solid #c0c0c0;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 20px;
 }
 
 .empty {
