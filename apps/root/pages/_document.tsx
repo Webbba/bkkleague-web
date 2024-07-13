@@ -11,6 +11,7 @@ export default function Document(props: DocumentProps) {
         <div id="modal-root" />
         <NextScript />
       </body>
+      <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
     </Html>
   );
 }

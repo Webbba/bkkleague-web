@@ -38,7 +38,7 @@ function AppContent({ Component, pageProps }: AppProps) {
     undefined,
   );
 
-  const { events } = useRouter();
+  const { events, pathname, push } = useRouter();
 
   const getSeasonAction = useCallback(async () => {
     const { res } = await getSeason();
@@ -77,9 +77,43 @@ function AppContent({ Component, pageProps }: AppProps) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
+  const colors = ['#bb0000', '#ffffff'];
+
+  const end = Date.now() + 10 * 1000;
+
+  const frame = () => {
+    //@ts-ignore
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: colors,
+    });
+
+    //@ts-ignore
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: colors,
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  };
+
   useEffect(() => {
     getSeasonAction();
   }, []);
+
+  useEffect(() => {
+    if (pathname === '/') {
+      push('/upcoming');
+    }
+  }, [pathname]);
 
   return (
     <div className="wrapper" id="wrapper">

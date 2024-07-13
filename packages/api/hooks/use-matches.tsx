@@ -16,6 +16,12 @@ export const getMatches = async (id: string) => {
   return { res, url };
 };
 
+export const getMissedMatches = async () => {
+  const res = await get(ApiRoutes.MISSED_MATCHES);
+
+  return { res, url: ApiRoutes.MISSED_MATCHES };
+};
+
 export const getCompletedMatches = async () => {
   const res = await get(`${ApiRoutes.UPCOMING}?completed=true`);
 

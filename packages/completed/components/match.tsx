@@ -7,7 +7,13 @@ import { AnimationContext } from 'base-components/context/animation-context';
 
 import cn from './matches.module.css';
 
-export default function Match({ match: matchItem }: { match?: MatchProps }) {
+export default function Match({
+  match: matchItem,
+  missed,
+}: {
+  match?: MatchProps;
+  missed?: boolean;
+}) {
   const [match, setMatch] = useState<MatchProps | undefined>(undefined);
   const elementRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -31,7 +37,7 @@ export default function Match({ match: matchItem }: { match?: MatchProps }) {
 
   return (
     <Link
-      href={`/matches/${match?.match_id}/completed`}
+      href={`/matches/${missed ? match?.id : match?.match_id}/${missed ? 'missed' : 'completed'}`}
       className={cn.match}
       ref={elementRef}
       onClick={(e) => {
@@ -41,18 +47,20 @@ export default function Match({ match: matchItem }: { match?: MatchProps }) {
           setAnimationRequested(true);
 
           setTimeout(() => {
-            push(`/matches/${match?.match_id}/completed`);
+            push(
+              `/matches/${missed ? match?.id : match?.match_id}/${missed ? 'missed' : 'completed'}`,
+            );
           }, 500);
         }
       }}
     >
       <div className={cn.matchTop}>
         <div className={`${cn.matchPlayer} ${cn.matchPlayerTop}`}>
-          {match?.home_team_short_name}
+          {match?.home_team_short_name || match?.home_team_name}
         </div>
         <div className={cn.separator} />
         <div className={`${cn.matchPlayer} ${cn.matchPlayerBottom}`}>
-          {match?.away_team_short_name}
+          {match?.away_team_short_name || match?.away_team_name}
         </div>
       </div>
       <div className={cn.matchScoreWrapper}>

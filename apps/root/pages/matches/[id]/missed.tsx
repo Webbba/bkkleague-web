@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
-import { getMatch, getFrames } from 'api';
+import { getMatch, getSeason, getFrames } from 'api';
 import { GetServerSidePropsContext } from 'next/types';
 import Head from 'next/head';
 import { MatchLayout } from 'base-components';
-import { Frame } from 'base-components/types';
+import { Frame, TeamStats } from 'base-components/types';
+import { useEffect, useState } from 'react';
 
 const isOdd = (num: number) => {
   return num % 2;
 };
 
-export default function Completed({
+export default function Waiting({
   fallback,
 }: {
   fallback?: {
+    match: any;
     frames: {
       firstBreak?: string;
       frameData: Frame[];
@@ -21,7 +22,6 @@ export default function Completed({
         away: any;
       };
     };
-    match: any;
   };
 }) {
   const [framePage, setFramePage] = useState(0);
@@ -77,26 +77,38 @@ export default function Completed({
         <title>Bangkok pool league | Match</title>
       </Head>
       <MatchLayout
-        frames={frames}
         currentMatch={fallback?.match}
+        frames={frames}
         framePage={framePage}
         setFramePage={setFramePage}
-        completed
+        missed
       />
     </>
   );
 }
 
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-  const { res: frames } = await getFrames(query?.id as string);
   const { res: match } = await getMatch(query?.id as string);
+  const { res: season } = await getSeason();
+  const { res: frames } = await getFrames(query?.id as string);
+
+  let props: any = {
+    fallback: {
+      match: match.data,
+      frames: frames.data,
+    },
+  };
+
+  if (season && season[0]) {
+    props = {
+      ...props,
+      fallback: {
+        ...props.fallback,
+      },
+    };
+  }
 
   return {
-    props: {
-      fallback: {
-        frames: frames.data,
-        match: match.data,
-      },
-    },
+    props,
   };
 }

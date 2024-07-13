@@ -34,7 +34,7 @@ export default function Matches({
               {`${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
             </div>
           )}
-          {Object.keys(groupedMatches).map((group, index) => {
+          {Object.keys(groupedMatches).map((group) => {
             return (
               <div
                 key={`group-${group.split(':').join('-').split('.').join('-')}`}

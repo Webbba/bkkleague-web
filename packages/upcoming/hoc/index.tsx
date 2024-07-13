@@ -37,18 +37,73 @@ export default function UpcomingMatches({
     ({ date }: { date: string }) => date,
   );
 
+  const nextUpcomingMatches: {
+    date: string;
+    matches: MatchProps[];
+  }[] = [];
+
+  Object.keys(groupedMatches).forEach((group) => {
+    nextUpcomingMatches.push({
+      date: group,
+      matches: groupedMatches[group],
+    });
+  });
+
   return (
     <div className={cn.upcomingWrapper}>
-      <div className={cn.currentDate}>
-        {`${months[currentMonth]} ${currentYear}`}
-      </div>
       {todayMatches && todayMatches.length > 0 && (
-        <TodayMatches matches={todayMatches} score={score} />
+        <>
+          <div className={cn.currentDate}>
+            {`${months[currentMonth]} ${currentYear}`}
+          </div>
+          <TodayMatches matches={todayMatches} score={score} />
+        </>
       )}
       <div
         className={`${cn.otherUpcomingMatches} ${!todayMatches?.length ? cn.withoutPadding : ''}`}
       >
-        {Object.keys(groupedMatches).map((group) => {
+        {nextUpcomingMatches?.map((item, index) => {
+          const currentDate = new Date(item.date);
+
+          const groupedUpcomingMatches = groupBy(
+            item.matches,
+            ({ date }: { date: string }) => date,
+          );
+
+          return (
+            <div className={cn.matchWrapper} key={`${item.date}-${index}`}>
+              {(!nextUpcomingMatches[index - 1] ||
+                (nextUpcomingMatches[index - 1] &&
+                  months[currentDate.getMonth()] !==
+                    months[
+                      new Date(nextUpcomingMatches[index - 1]?.date).getMonth()
+                    ])) && (
+                <div className={cn.matchDate}>
+                  {`${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
+                </div>
+              )}
+              {Object.keys(groupedUpcomingMatches).map((group) => {
+                return (
+                  <div
+                    key={`group-${group.split(':').join('-').split('.').join('-')}`}
+                  >
+                    <div className={cn.upcomingMatchesTitle}>
+                      {`${weekday[new Date(groupedUpcomingMatches[group][0].date).getDay()]} (${months[new Date(groupedUpcomingMatches[group][0].date).getMonth()]} ${new Date(groupedUpcomingMatches[group][0].date).getDate()}${daySuffix(new Date(groupedUpcomingMatches[group][0].date).getDate())})`}
+                    </div>
+                    <div className={cn.upcomingMatchesWrapper}>
+                      {groupedUpcomingMatches[group]?.map(
+                        (item: MatchProps) => (
+                          <Match key={item.match_id} match={item} />
+                        ),
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+        {/* {Object.keys(groupedMatches).map((group) => {
           return (
             <div
               key={`group-${group.split(':').join('-').split('.').join('-')}`}
@@ -63,7 +118,7 @@ export default function UpcomingMatches({
               </div>
             </div>
           );
-        })}
+        })} */}
       </div>
     </div>
   );

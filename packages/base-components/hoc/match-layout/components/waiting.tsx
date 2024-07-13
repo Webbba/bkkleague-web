@@ -79,32 +79,40 @@ export default function Waiting({
       </div>
       <div className={cn.stats}>
         <div className={cn.statsItem}>
-          <div className={cn.statsValue}>{homeTeamStats?.points}</div>
+          <div className={cn.statsValue}>{homeTeamStats?.points || 'None'}</div>
           <div className={`${cn.statsValue} ${cn.statsTitle}`}>Points</div>
-          <div className={cn.statsValue}>{awayTeamStats?.points}</div>
+          <div className={cn.statsValue}>{awayTeamStats?.points || 'None'}</div>
         </div>
         <div className={cn.statsItem}>
-          <div
-            className={cn.statsValue}
-          >{`${homeTeamStats?.wins}/${homeTeamStats?.losses}`}</div>
+          <div className={cn.statsValue}>
+            {homeTeamStats?.wins && homeTeamStats?.losses
+              ? `${homeTeamStats?.wins}/${homeTeamStats?.losses}`
+              : 'None'}
+          </div>
           <div className={`${cn.statsValue} ${cn.statsTitle}`}>Win/Lose</div>
-          <div
-            className={cn.statsValue}
-          >{`${awayTeamStats?.wins}/${awayTeamStats?.losses}`}</div>
+          <div className={cn.statsValue}>
+            {awayTeamStats?.wins && awayTeamStats?.losses
+              ? `${awayTeamStats?.wins}/${awayTeamStats?.losses}`
+              : 'None'}
+          </div>
         </div>
         <div className={cn.statsItem}>
-          <div className={cn.statsValue}>{homeTeamStats?.frames}</div>
+          <div className={cn.statsValue}>{homeTeamStats?.frames || 'None'}</div>
           <div className={`${cn.statsValue} ${cn.statsTitle}`}>Frames</div>
-          <div className={cn.statsValue}>{awayTeamStats?.frames}</div>
+          <div className={cn.statsValue}>{awayTeamStats?.frames || 'None'}</div>
         </div>
         <div className={cn.statsItem}>
-          <div
-            className={cn.statsValue}
-          >{`${homeTeamBestPlayer?.nickname} - ${homeTeamBestPlayer?.points}${declination(Math.floor(homeTeamBestPlayer?.points as number), ['pt', 'pt', 'pts'])}`}</div>
+          <div className={cn.statsValue}>
+            {homeTeamBestPlayer
+              ? `${homeTeamBestPlayer?.nickname} - ${homeTeamBestPlayer?.points}${declination(Math.floor(homeTeamBestPlayer?.points as number), ['pt', 'pt', 'pts'])}`
+              : 'None'}
+          </div>
           <div className={`${cn.statsValue} ${cn.statsTitle}`}>Best Player</div>
-          <div
-            className={cn.statsValue}
-          >{`${awayTeamBestPlayer?.nickname} - ${awayTeamBestPlayer?.points}${declination(Math.floor(awayTeamBestPlayer?.points as number), ['pt', 'pt', 'pts'])}`}</div>
+          <div className={cn.statsValue}>
+            {awayTeamBestPlayer
+              ? `${awayTeamBestPlayer?.nickname} - ${awayTeamBestPlayer?.points}${declination(Math.floor(awayTeamBestPlayer?.points as number), ['pt', 'pt', 'pts'])}`
+              : 'None'}
+          </div>
         </div>
       </div>
     </>

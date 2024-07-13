@@ -35,3 +35,15 @@
   margin-bottom: 60px;
   border-bottom: 1px solid #c0c0c0;
 }
+
+.match-date {
+  padding-top: 48px;
+  margin-bottom: 54px;
+  box-sizing: border-box;
+  text-align: center;
+  padding-bottom: 48px;
+  border-bottom: 1px solid #c0c0c0;
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 74px;
+}

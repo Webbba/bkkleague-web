@@ -22,6 +22,7 @@ export default function MatchLayout({
   framePage,
   setFramePage,
   playing,
+  missed,
 }: {
   currentMatch?: any;
   homeTeamStats?: TeamStats;
@@ -39,6 +40,7 @@ export default function MatchLayout({
   };
   framePage?: number;
   setFramePage?: (data: number) => void;
+  missed?: boolean;
 }) {
   const [fullscreen, setFullscreen] = useState(false);
   const router = useRouter();
@@ -83,8 +85,16 @@ export default function MatchLayout({
               setAnimationRequested(true);
             }
 
+            let url = '/upcoming';
+
+            if (completed) {
+              url = '/completed';
+            } else if (missed) {
+              url = '/missed';
+            }
+
             setTimeout(() => {
-              router.push(!completed ? '/upcoming' : '/completed');
+              router.push(url);
             }, 500);
           }}
         >
@@ -92,9 +102,10 @@ export default function MatchLayout({
         </button>
 
         <div className={cn.matchHeaderTitle}>
-          {!currentMatch && !playing && 'Starting soon'}
+          {!currentMatch && !playing && !missed && 'Starting soon'}
           {currentMatch && completed && 'Finished'}
           {playing && 'Match in Progress'}
+          {missed && 'Match Missed'}
         </div>
 
         <button
@@ -106,7 +117,7 @@ export default function MatchLayout({
           <IconFullScreen />
         </button>
       </div>
-      {!currentMatch && !playing && (
+      {!currentMatch && !playing && !missed && (
         <div className={cn.matchStartingHint}>
           <IconHint />
           Match will start automaticaly, then Captains pick 1st players
@@ -121,7 +132,7 @@ export default function MatchLayout({
           frames={frames}
         />
       )}
-      {((currentMatch && completed) || playing) && (
+      {((currentMatch && (completed || missed)) || playing) && (
         <Completed
           frames={frames}
           framePage={framePage}

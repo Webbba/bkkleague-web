@@ -13,7 +13,6 @@
     "next": "*"
   },
   "dependencies": {
-    "@tsparticles/preset-confetti": "^3.1.0",
     "api": "*",
     "base-components": "*",
     "completed-matches": "*",

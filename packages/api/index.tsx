@@ -17,6 +17,7 @@ export {
   getFrames,
   getMatches,
   getCompletedMatches,
+  getMissedMatches,
 } from './hooks/use-matches';
 
 // teams
