@@ -11,6 +11,7 @@ export default function Completed({
   setFramePage,
 }: {
   frames?: {
+    firstBreak?: string;
     frameData: Frame[];
     teams: {
       home: any;
@@ -24,8 +25,6 @@ export default function Completed({
 
   useEffect(() => {
     if (frames && framePage !== undefined) {
-      console.log();
-
       setCurrentFrames(
         frames?.frameData?.slice(
           framePage * 4,

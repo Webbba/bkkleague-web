@@ -65,6 +65,8 @@ export interface BestPlayer {
 
 export interface Frame {
   frameNumber: number;
+  homeTeamBreak?: boolean;
+  awayTeamBreak?: boolean;
   winner: {
     side: string;
     teamId: number;

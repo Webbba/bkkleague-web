@@ -1,13 +1,13 @@
 import { Frame as FrameProps } from '../../../types';
 import IconStar from '../../icons/star';
-// import IconBreak from '../../icons/break';
+import IconBreak from '../../icons/break';
 
 import cn from './match.module.css';
 
 export default function FrameItem({
   frame,
-  homeTeamId,
   awayTeamId,
+  homeTeamId,
   framesLength,
 }: {
   frame?: FrameProps;
@@ -19,7 +19,7 @@ export default function FrameItem({
     <div className={`${cn.frame} ${framesLength === 4 ? cn.fullHeight : ''}`}>
       <div className={cn.frameLeft}>
         <div className={cn.breakWrapper}>
-          <IconStar />
+          {frame?.homeTeamBreak ? <IconBreak /> : <IconStar />}
         </div>
         <div className={cn.playersWrapper}>
           {frame?.players?.home
@@ -36,7 +36,7 @@ export default function FrameItem({
       </div>
       <div className={cn.frameRight}>
         <div className={cn.breakWrapper}>
-          <IconStar />
+          {frame?.awayTeamBreak ? <IconBreak /> : <IconStar />}
         </div>
         <div className={cn.playersWrapper}>
           {frame?.players?.away
