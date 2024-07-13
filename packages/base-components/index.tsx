@@ -7,6 +7,8 @@ export { default as IconUpcoming } from './hoc/icons/upcoming';
 export { default as IconCompleted } from './hoc/icons/completed';
 export { default as IconFMissed } from './hoc/icons/missed';
 export { default as MatchLayout } from './hoc/match-layout/match-layout';
+export { default as IconClose } from './hoc/icons/close';
+export { default as IconPrize } from './hoc/icons/prize';
 
 // context
 export { default as HeaderContext } from './context/header-context';

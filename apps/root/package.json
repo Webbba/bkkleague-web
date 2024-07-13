@@ -13,16 +13,17 @@
     "next": "*"
   },
   "dependencies": {
+    "@tsparticles/preset-confetti": "^3.1.0",
     "api": "*",
     "base-components": "*",
-    "upcoming-matches": "*",
     "completed-matches": "*",
     "lodash.isequal": "^4.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.8",
     "react-use-websocket": "^4.8.1",
-    "swr": "^2.1.0"
+    "swr": "^2.1.0",
+    "upcoming-matches": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

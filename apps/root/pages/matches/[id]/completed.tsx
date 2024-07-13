@@ -39,37 +39,35 @@ export default function Completed({
 
   useEffect(() => {
     if (fallback?.frames) {
-      if (fallback?.frames.firstBreak) {
-        const nextFrames = { ...fallback.frames };
+      const nextFrames = { ...fallback.frames };
 
-        const nextFramesMatches = nextFrames.frameData.map((item, index) => {
-          const result = { ...item };
+      const nextFramesMatches = nextFrames.frameData.map((item, index) => {
+        const result = { ...item };
 
-          if (fallback?.frames.firstBreak === 'home') {
-            if (isOdd(index) === 0) {
-              result.homeTeamBreak = true;
-              result.awayTeamBreak = false;
-            } else {
-              result.awayTeamBreak = true;
-              result.homeTeamBreak = false;
-            }
-          } else if (fallback?.frames.firstBreak === 'away') {
-            if (isOdd(index) === 0) {
-              result.awayTeamBreak = true;
-              result.homeTeamBreak = false;
-            } else {
-              result.homeTeamBreak = true;
-              result.awayTeamBreak = false;
-            }
+        if (fallback?.frames.firstBreak === 'home') {
+          if (isOdd(index) === 0) {
+            result.homeTeamBreak = true;
+            result.awayTeamBreak = false;
+          } else {
+            result.awayTeamBreak = true;
+            result.homeTeamBreak = false;
           }
+        } else if (fallback?.frames.firstBreak === 'away') {
+          if (isOdd(index) === 0) {
+            result.awayTeamBreak = true;
+            result.homeTeamBreak = false;
+          } else {
+            result.homeTeamBreak = true;
+            result.awayTeamBreak = false;
+          }
+        }
 
-          return result;
-        });
+        return result;
+      });
 
-        nextFrames.frameData = nextFramesMatches;
+      nextFrames.frameData = nextFramesMatches;
 
-        setFrames(nextFrames);
-      }
+      setFrames(nextFrames);
     }
   }, [fallback?.frames]);
 

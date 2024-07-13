@@ -11,10 +11,6 @@ module.exports = {
     'upcoming',
     'completed'
   ],
-  i18n: {
-    locales: ['en'],
-    defaultLocale: 'en',
-  },
   output: 'standalone',
   experimental: {
     outputFileTracingRoot: path.join(__dirname, '../../'),
@@ -22,7 +18,6 @@ module.exports = {
       '/api': ['./pages/api/*'],
     },
   },
-  distDir: 'build',
   // experimental: {
   //   outputFileTracingRoot: path.join(__dirname, '../../'),
   // },

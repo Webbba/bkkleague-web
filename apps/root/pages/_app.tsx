@@ -6,6 +6,8 @@ import {
   DefaultStyles,
   HeaderContext as HeaderContextProvider,
   AnimationContext as AnimationContextProvider,
+  IconClose,
+  IconPrize,
 } from 'base-components';
 import { HeaderContext } from 'base-components/context/header-context';
 import { AnimationContext } from 'base-components/context/animation-context';
@@ -14,10 +16,27 @@ import Image from 'next/image';
 
 import './base.css';
 
+const phrases = [
+  'Easy for',
+  'Congratulations,',
+  'Outstanding match,',
+  'Tremendous,',
+  'Splendid victory,',
+  'Excellent performance,',
+  'Job well done,',
+  'And the winner is',
+  'Phenomenal performance,',
+  'Outstanding play,',
+];
+
 function AppContent({ Component, pageProps }: AppProps) {
   const { setSeason } = useContext(HeaderContext);
   const { animationRequested, setAnimationRequested } =
     useContext(AnimationContext);
+  const [playerWinPopupVisible, setPlayerWinPopupVisible] = useState(false);
+  const [phraseNumber, setPhraseNumber] = useState<number | undefined>(
+    undefined,
+  );
 
   const { events } = useRouter();
 
@@ -52,6 +71,12 @@ function AppContent({ Component, pageProps }: AppProps) {
     }
   });
 
+  const getRandomInt = () => {
+    const min = 0;
+    const max = 9;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
   useEffect(() => {
     getSeasonAction();
   }, []);
@@ -69,6 +94,28 @@ function AppContent({ Component, pageProps }: AppProps) {
             <Image src={HeaderLogo} alt="Logo" className="logo-image" />
           </div>
         </div>
+      </div>
+      <div
+        className={`player-win-popup ${
+          playerWinPopupVisible ? 'show-popup' : ''
+        }`}
+      >
+        <button
+          className="close-button"
+          onClick={() => {
+            setPlayerWinPopupVisible(false);
+            setPhraseNumber(undefined);
+          }}
+        >
+          <IconClose />
+        </button>
+        <div className="icon-wrapper">
+          <IconPrize />
+        </div>
+        {phraseNumber !== undefined && (
+          <div className="text">{phrases[phraseNumber]}</div>
+        )}
+        <div className="player-name">Simon</div>
       </div>
       <Component {...pageProps} />;
     </div>
