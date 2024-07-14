@@ -106,7 +106,7 @@ export default function Completed({
         </div>
       </div>
       <div className={cn.framesWrapper}>
-        {currentFrames?.map((item) => (
+        {currentFrames?.map((item, index) => (
           <FrameItem
             key={item.frameNumber}
             frame={item}
@@ -125,8 +125,10 @@ export default function Completed({
           }
           disabled={framePage === 0}
         >
-          <IconArrowLeft width={40} height={40} />
-          Previous page
+          <div className={cn.pageIconWrapper}>
+            <IconArrowLeft width={40} height={40} />
+          </div>
+          <div className={cn.pageTextWrapper}>Previous page</div>
         </button>
         <div className={cn.framePages}>
           {`${framePage === 0 ? 1 : (framePage as number) * 4} - ${(framePage as number) * 4 + 4} from 20`}
@@ -142,8 +144,10 @@ export default function Completed({
             !frames?.frameData?.slice((framePage as number) * 4 + 4).length
           }
         >
-          Next page
-          <IconArrowLeft width={40} height={40} />
+          <div className={cn.pageTextWrapper}> Next page</div>
+          <div className={cn.pageIconWrapper}>
+            <IconArrowLeft width={40} height={40} />
+          </div>
         </button>
       </div>
     </>

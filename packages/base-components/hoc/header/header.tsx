@@ -52,6 +52,7 @@ export default function Header({ season }: { season?: Season | null }) {
             type="button"
             aria-label="Full Screen Button"
             onClick={onFullScreenButtonClick}
+            className={cn.fullscreenButton}
           >
             <IconFullScreen />
           </button>

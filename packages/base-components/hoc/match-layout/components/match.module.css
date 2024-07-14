@@ -12,6 +12,8 @@
     transform: translate(-50%, -50%);
     z-index: 10;
     pointer-events: none;
+    width: 19vh;
+    height: 19vh;
   }
 }
 
@@ -23,8 +25,8 @@
   text-align: center;
   color: #fff;
   transform: skewX(-18deg);
-  width: calc(50% + 80px);
-  height: 482px;
+  width: calc(50vw + 9vh);
+  height: 40vh;
 }
 
 .team-name-wrapper {
@@ -36,7 +38,7 @@
 .completed-match-teams {
   & .home-team,
   & .away-team {
-    height: 225px;
+    height: 18vh;
     flex-direction: row;
     justify-content: space-between;
   }
@@ -44,13 +46,13 @@
   & .team-name {
     font-size: 30px;
 
-    & .team-name-flex {
+    &.team-name-flex {
       display: flex;
       flex-direction: row;
       white-space: nowrap;
   
       & .team-logo {
-        transform: skew(14deg);
+        transform: skew(0);
       }
     }
    
@@ -59,24 +61,25 @@
   & .home-team {
     & .team-name,
     & .team-logo {
-      margin-left: 120px;
+      margin-left: 14vh;
 
       & div {
         display: flex;
         flex-direction: column;
         justify-content: center;
         font-weight: 700;
-        font-size: 28px;
+        font-size: 2.8;
       }
     }
 
     & .very-small-logo  {
-      margin-right: 20px;
-      height: 80px;
+      margin-right: 2vh;
+      height: 12vh;
+      margin-left: 0;
     }
 
     & .frames {
-      margin-right: 80px;
+      margin-right: 8vh;
     }
   }
  
@@ -84,33 +87,34 @@
     flex-direction: row-reverse;
 
     & .very-small-logo {
-      height: 80px;
+      height: 12vh;
       margin-left: 20px;
+      margin-right: 0 !important;
     }
 
     & .team-name,
     & .team-logo {
-      margin-right: 120px;
+      margin-right: 14vh;
       
       & div {
         display: flex;
         flex-direction: column;
         justify-content: center;
         font-weight: 700;
-        font-size: 28px;
+        font-size: 2.8vh;
       }
     }
 
     & .frames {
-      margin-left: 80px;
+      margin-left: 8vh;
     }
   }
 
   & .team-logo {
-    height: 169px;
+    height: 15vh;
     margin: 0;
     width: auto;
-    max-width: 320px;
+    max-width: 20vh;
   }
 }
 
@@ -125,41 +129,43 @@
   flex-direction: column;
   justify-content: center;
   font-family: Inter;
-  font-size: 132px;
+  font-size: 13vh;
   font-weight: 700;
-  line-height: 156px;
+  line-height: 1;
   transform: skew(18deg);
 }
 
 .home-team {
   background: linear-gradient(270deg, #ff5400 0%, #ffba00 100%);
-  margin-left: -90px;
+  margin-left: -10vh;
 }
 
 .away-team {
   background: linear-gradient(270deg, #700AC5 0%, #DD0C84 100%);
-  margin-right: -90px;
+  margin-right: -10vh;
 }
 
 .team-name {
   transform: skew(18deg);
-  font-size: 50px;
+  font-size: 5vh;
   font-weight: 700;
   text-transform: uppercase;
 
 }
 
 .team-logo {
-  height: 338px;
+  height: 35vh;
   object-fit: contain;
   transform: skew(18deg);
   width: 70%;
   margin: 0 auto;
 
   &.logo-small {
-    height: 180px;
+    width: auto;
+    height: 20vh;
+    display: block;
     margin-bottom: 10px;
-    transform: skew(14deg);
+    transform: skew(0);
   }
 }
 
@@ -168,16 +174,24 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  height: 40vh;
+
+  &.missed-stats {
+    height: 48vh;
+
+    & .stats-item { 
+      height: calc(12vh - 5px);
+    }
+  }
 }
 
 .stats-item {
   box-sizing: border-box;
-  min-height: 124px;
   border-bottom: 1px solid #c0c0c0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  flex: 1;
+  height: calc(10vh - 5px);
 
   &:last-child {
     border-bottom: none;
@@ -185,17 +199,18 @@
 }
 
 .stats-value {
-  width: 33%;
+  width: 40vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  font-size: 44px;
+  font-size: 4.5vh;
   font-weight: 700;
   line-height: 52px;
 
   &.stats-title {
     font-weight: 400;
+    width: 20vw;
   }
 }
 
@@ -203,27 +218,23 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  flex: 1;
+  height: 55vh;
 }
 
 .frame {
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 40px;
+  padding: 0 2vh;
   box-sizing:  border-box;
   border-bottom: 1px solid #c0c0c0;
-  height: 200px;
-
-  &.full-height {
-    flex: 1;
-  }
+  height: 13.75vh;
 }
 
 .frame-left,
 .frame-right {
-  width: 50%;
+  width: 50vw;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -240,33 +251,38 @@
   justify-content: center;
 }
 
+.break-wrapper svg {
+  height: 11.5vh;
+  width: 11.5vh;
+}
+
 .result-frame {
-  width: 128px;
-  height: 108px;
+  width: 13vh;
+  height: 12vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   background: linear-gradient(180deg, #FF5300 0%, #DD0605 100%);
   color: #fff;
   text-align: center;
-  font-size: 36px;
+  font-size: 4vh;
   font-weight: 700;
   line-height: 52px;
   text-transform: uppercase;
 
 
   &.home-result {
-    border-radius: 50px 0px 0px 50px;
+    border-radius: 7vh 0vh 0vh 7vh;
   }
 
   &.away-result {
-    border-radius: 0px 50px 50px 0px;
+    border-radius: 0vh 7vh 7vh 0vh;
 
   }
 
   &.winner {
     background: linear-gradient(180deg, #65C900 0%, #00BE5E 100%);
-    font-size: 44px;
+    font-size: 5vh;
   }
 }
 
@@ -274,17 +290,24 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 44px;
+  font-size: 3.6vh;
   font-weight: 700;
-  line-height: 52px;
+  line-height: 1;
+  text-transform: uppercase;
   color: #171818;
+  max-width: 24vw;
+  text-align: center;
+
+  & span {
+    font-weight: 700;
+  }
 }
 
 .frames-pagination {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 124px; 
+  height: 15vh;
 }
 
 .page-button,
@@ -294,16 +317,26 @@
 } 
 
 .page-button {
-  padding-left: 40px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  font-size: 44px;
-  font-weight: 700;
-  line-height: 52px;
-  text-transform: uppercase;
   box-sizing: border-box;
-  padding-top: 36px;
+  padding-left: 4vh;
+
+  & .page-text-wrapper,
+  & .page-icon-wrapper  {
+    display: flex;
+    height: 15vh;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  & .page-text-wrapper {
+    font-size: 3.6vh;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
 
   &.disabled {
     color: #c0c0c0;
@@ -316,20 +349,20 @@
   }
 
   & svg {
-    margin-right: 41px;
-    margin-top: 6px;
+    margin-right: 2vh;
   }
 }
 
 .next-button {
   padding-left: 0;
-  padding-right: 40px;
+  padding-right: 4vh;
   justify-content: flex-end;
+  padding-left: 0;
 
   & svg {
     transform: rotate(180deg);
     margin-right: 0;
-    margin-left: 41px;
+    margin-left: 2vh;
   }
 }
 

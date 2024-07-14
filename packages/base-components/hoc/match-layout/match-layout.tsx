@@ -118,9 +118,13 @@ export default function MatchLayout({
         </button>
       </div>
       {!currentMatch && !playing && !missed && (
-        <div className={cn.matchStartingHint}>
-          <IconHint />
-          Match will start automaticaly, then Captains pick 1st players
+        <div className={cn.matchStartingHintWrapper}>
+          <div className={cn.matchStartingHint}>
+            <div className={cn.matchStartingHintIconWrapper}>
+              <IconHint />
+            </div>
+            Match will start automaticaly, then Captains pick 1st players
+          </div>
         </div>
       )}
       {!currentMatch && !playing && (
@@ -130,6 +134,7 @@ export default function MatchLayout({
           awayTeamBestPlayer={awayTeamBestPlayer}
           homeTeamBestPlayer={homeTeamBestPlayer}
           frames={frames}
+          missed={missed}
         />
       )}
       {((currentMatch && (completed || missed)) || playing) && (

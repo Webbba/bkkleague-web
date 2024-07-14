@@ -4,15 +4,15 @@
 }
  
  .today-matches-date {
-  margin-bottom: 36px;
+  margin-bottom: 3.6vh;
   text-align: center;
   font-weight: 700;
-  font-size: 44px;
-  line-height: 52px;
+  font-size: 5vh;
+  line-height: 1;
 }
 
 .match-title {
-  margin: 18px 0;
+  margin: 2vh 0;
   position: relative;
   height: 1px;
   background: #c0c0c0;
@@ -20,11 +20,11 @@
   & span {
     position: absolute;
     background: #fff;
-    padding: 0 40px;
+    padding: 0 4vh;
     text-transform: uppercase;
     font-weight: 600;
-    font-size: 28px;
-    line-height: 36px;
+    font-size: 3vh;
+    line-height: 1;
     color: #000;
     left: 50%;
     top: 50%;

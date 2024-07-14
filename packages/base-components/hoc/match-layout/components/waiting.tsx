@@ -10,11 +10,13 @@ export default function Waiting({
   awayTeamBestPlayer,
   homeTeamBestPlayer,
   frames,
+  missed,
 }: {
   homeTeamStats?: TeamStats;
   awayTeamStats?: TeamStats;
   awayTeamBestPlayer?: BestPlayer;
   homeTeamBestPlayer?: BestPlayer;
+  missed?: boolean;
   frames?: {
     frameData: Frame[];
     teams: {
@@ -77,7 +79,7 @@ export default function Waiting({
           )}
         </div>
       </div>
-      <div className={cn.stats}>
+      <div className={`${cn.stats} ${missed ? cn.missedStats : ''}`}>
         <div className={cn.statsItem}>
           <div className={cn.statsValue}>{homeTeamStats?.points || 'None'}</div>
           <div className={`${cn.statsValue} ${cn.statsTitle}`}>Points</div>

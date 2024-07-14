@@ -1,13 +1,12 @@
 .current-date {
-  padding-top: 48px;
-  margin-bottom: 54px;
+  padding-top: 4.8vh;
+  margin-bottom: 5.4vh;
   box-sizing: border-box;
   text-align: center;
-  padding-bottom: 48px;
+  padding-bottom: 4.8vh;
   border-bottom: 1px solid #c0c0c0;
   font-weight: 700;
-  font-size: 72px;
-  line-height: 74px;
+  font-size: 8vh;
 }
 
 .other-upcoming-matches {

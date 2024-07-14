@@ -19,12 +19,18 @@ export default function FrameItem({
     <div className={`${cn.frame} ${framesLength === 4 ? cn.fullHeight : ''}`}>
       <div className={cn.frameLeft}>
         <div className={cn.breakWrapper}>
-          {frame?.homeTeamBreak ? <IconBreak /> : <IconStar />}
+          {frame?.homeTeamBreak ? (
+            <IconBreak id={`home-${frame.frameNumber}`} />
+          ) : (
+            <IconStar />
+          )}
         </div>
         <div className={cn.playersWrapper}>
-          {frame?.players?.home
-            ?.map((item) => item?.nickname || 'Guest')
-            ?.join(' & ')}
+          <span>
+            {frame?.players?.home
+              ?.map((item) => item?.nickname || 'Guest')
+              ?.join(' & ')}
+          </span>
         </div>
         <div className={cn.resultFameWrapper}>
           <div
@@ -36,12 +42,18 @@ export default function FrameItem({
       </div>
       <div className={cn.frameRight}>
         <div className={cn.breakWrapper}>
-          {frame?.awayTeamBreak ? <IconBreak /> : <IconStar />}
+          {frame?.awayTeamBreak ? (
+            <IconBreak id={`away-${frame.frameNumber}`} />
+          ) : (
+            <IconStar />
+          )}
         </div>
         <div className={cn.playersWrapper}>
-          {frame?.players?.away
-            ?.map((item) => item?.nickname || 'Guest')
-            ?.join(' & ')}
+          <span>
+            {frame?.players?.away
+              ?.map((item) => item?.nickname || 'Guest')
+              ?.join(' & ')}
+          </span>
         </div>
         <div className={cn.resultFameWrapper}>
           <div
