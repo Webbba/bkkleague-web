@@ -27,7 +27,7 @@
 @font-face {
   font-family: 'Inter';
   font-style: normal;
-  font-weight: 700;
+  font-weight: bold;
   src: url('./fonts/inter-bold.eot'); /* IE9 Compat Modes */
   src: local(''),
        url('./fonts/inter-bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */

@@ -106,7 +106,7 @@ export default function Completed({
         </div>
       </div>
       <div className={cn.framesWrapper}>
-        {currentFrames?.map((item, index) => (
+        {currentFrames?.map((item) => (
           <FrameItem
             key={item.frameNumber}
             frame={item}
@@ -115,6 +115,9 @@ export default function Completed({
             framesLength={currentFrames?.length}
           />
         ))}
+        {!currentFrames.length && (
+          <div className={cn.emptyFrames}>Waiting for Match Start</div>
+        )}
       </div>
       <div className={cn.framesPagination}>
         <button

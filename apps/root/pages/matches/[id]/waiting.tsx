@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   getMatch,
   getTeamStats,
@@ -21,6 +22,7 @@ export default function Waiting({
     awayTeamBestPlayer: BestPlayer;
     homeTeamBestPlayer: BestPlayer;
     frames: {
+      firstBreak?: string;
       frameData: Frame[];
       teams: {
         home: any;
@@ -29,6 +31,14 @@ export default function Waiting({
     };
   };
 }) {
+  const { push, query } = useRouter();
+
+  useEffect(() => {
+    if (fallback?.frames && fallback.frames.firstBreak && fallback.match) {
+      push(`/matches/${query?.id}/playing`);
+    }
+  }, [fallback?.frames, fallback?.match]);
+
   return (
     <>
       <Head>

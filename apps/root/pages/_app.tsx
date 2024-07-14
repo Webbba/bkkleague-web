@@ -2,6 +2,7 @@ import { useCallback, useEffect, useContext, useState } from 'react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { SwrConfig, getSeason } from 'api';
+import useWebSocket, { ReadyState, useSocketIO } from 'react-use-websocket';
 import {
   DefaultStyles,
   HeaderContext as HeaderContextProvider,
@@ -39,6 +40,18 @@ function AppContent({ Component, pageProps }: AppProps) {
   );
 
   const { events, pathname, push } = useRouter();
+
+  // const { sendMessage, lastMessage, readyState } = useSocketIO(
+  //   `${process.env.NEXT_PUBLIC_WSS_URL}`,
+  //   {
+  //     shouldReconnect: () => true,
+  //     onOpen: () => {},
+  //     onMessage: async (event) => {},
+  //     retryOnError: true,
+  //     reconnectAttempts: 1000,
+  //     reconnectInterval: () => 3000,
+  //   },
+  // );
 
   const getSeasonAction = useCallback(async () => {
     const { res } = await getSeason();
@@ -115,6 +128,15 @@ function AppContent({ Component, pageProps }: AppProps) {
     }
   }, [pathname]);
 
+  useEffect(() => {
+    if (playerWinPopupVisible) {
+      setTimeout(() => {
+        setPlayerWinPopupVisible(false);
+        setPhraseNumber(undefined);
+      }, 10500);
+    }
+  }, [playerWinPopupVisible]);
+
   return (
     <div className="wrapper" id="wrapper">
       <div className={`loader-wrapper ${animationRequested ? 'show' : ''}`}>
@@ -151,7 +173,7 @@ function AppContent({ Component, pageProps }: AppProps) {
         )}
         <div className="player-name">Simon</div>
       </div>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </div>
   );
 }

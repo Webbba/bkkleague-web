@@ -5,7 +5,7 @@
   text-align: center;
   padding-bottom: 4.8vh;
   border-bottom: 1px solid #c0c0c0;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 8vh;
 }
 
@@ -19,7 +19,7 @@
 
 .upcoming-matches-title {
   text-align: center;
-  font-weight: 700;
+  font-weight: bold;
   margin-bottom: 36px;
   font-size: 44px;
   line-height: 52px;
@@ -42,7 +42,7 @@
   text-align: center;
   padding-bottom: 48px;
   border-bottom: 1px solid #c0c0c0;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 72px;
   line-height: 74px;
 }

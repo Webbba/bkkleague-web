@@ -67,7 +67,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        font-weight: 700;
+        font-weight: bold;
         font-size: 2.8;
       }
     }
@@ -100,7 +100,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        font-weight: 700;
+        font-weight: bold;
         font-size: 2.8vh;
       }
     }
@@ -130,7 +130,7 @@
   justify-content: center;
   font-family: Inter;
   font-size: 13vh;
-  font-weight: 700;
+  font-weight: bold;
   line-height: 1;
   transform: skew(18deg);
 }
@@ -148,7 +148,7 @@
 .team-name {
   transform: skew(18deg);
   font-size: 5vh;
-  font-weight: 700;
+  font-weight: bold;
   text-transform: uppercase;
 
 }
@@ -205,7 +205,7 @@
   justify-content: center;
   text-align: center;
   font-size: 4.5vh;
-  font-weight: 700;
+  font-weight: bold;
   line-height: 52px;
 
   &.stats-title {
@@ -219,6 +219,18 @@
   flex-direction: column;
   justify-content: flex-start;
   height: 55vh;
+  position: relative;
+}
+
+.empty-frames {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-transform: uppercase;
+  font-size: 8vh;
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 .frame {
@@ -230,6 +242,10 @@
   box-sizing:  border-box;
   border-bottom: 1px solid #c0c0c0;
   height: 13.75vh;
+
+  &:nth-child(4) {
+    border-bottom: none;
+  }
 }
 
 .frame-left,
@@ -266,7 +282,7 @@
   color: #fff;
   text-align: center;
   font-size: 4vh;
-  font-weight: 700;
+  font-weight: bold;
   line-height: 52px;
   text-transform: uppercase;
 
@@ -291,7 +307,7 @@
   flex-direction: column;
   justify-content: center;
   font-size: 3.6vh;
-  font-weight: 700;
+  font-weight: bold;
   line-height: 1;
   text-transform: uppercase;
   color: #171818;
@@ -299,7 +315,7 @@
   text-align: center;
 
   & span {
-    font-weight: 700;
+    font-weight: bold;
   }
 }
 
@@ -308,6 +324,7 @@
   flex-direction: row;
   justify-content: space-between;
   height: 15vh;
+  border-top: 1px solid #c0c0c0;
 }
 
 .page-button,
@@ -332,13 +349,13 @@
   }
 
   & .page-text-wrapper {
-    font-size: 3.6vh;
-    font-weight: 700;
+    font-size: 3vw;
+    font-weight: bold;
     line-height: 1;
     text-transform: uppercase;
   }
 
-  &.disabled {
+  &:disabled {
     color: #c0c0c0;
 
     & svg {
@@ -373,7 +390,7 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  font-size: 44px;
+  font-size: 3.5vw;
   font-weight: 400;
   line-height: 52px;
   text-transform: uppercase;

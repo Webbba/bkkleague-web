@@ -103,22 +103,6 @@ export default function UpcomingMatches({
             </div>
           );
         })}
-        {/* {Object.keys(groupedMatches).map((group) => {
-          return (
-            <div
-              key={`group-${group.split(':').join('-').split('.').join('-')}`}
-            >
-              <div className={cn.upcomingMatchesTitle}>
-                {`${weekday[new Date(groupedMatches[group][0].date).getDay()]} (${months[new Date(groupedMatches[group][0].date).getMonth()]} ${new Date(groupedMatches[group][0].date).getDate()}${daySuffix(new Date(groupedMatches[group][0].date).getDate())})`}
-              </div>
-              <div className={cn.upcomingMatchesWrapper}>
-                {groupedMatches[group]?.map((item: MatchProps) => (
-                  <Match key={item.match_id} match={item} />
-                ))}
-              </div>
-            </div>
-          );
-        })} */}
       </div>
     </div>
   );

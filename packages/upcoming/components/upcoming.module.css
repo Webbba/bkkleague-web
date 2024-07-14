@@ -6,7 +6,7 @@
  .today-matches-date {
   margin-bottom: 36px;
   text-align: center;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 44px;
   line-height: 52px;
 }
@@ -131,7 +131,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-weight: 700;
+  font-weight: bold;
   color: #000;
   font-size: 44px;
   line-height: 52px;
