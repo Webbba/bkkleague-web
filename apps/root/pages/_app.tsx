@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useContext, useState } from 'react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { SwrConfig, getSeason } from 'api';
-import useWebSocket, { ReadyState, useSocketIO } from 'react-use-websocket';
+// import { io } from 'socket.io-client';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 import {
   DefaultStyles,
   HeaderContext as HeaderContextProvider,
@@ -13,7 +15,6 @@ import {
 import { HeaderContext } from 'base-components/context/header-context';
 import { AnimationContext } from 'base-components/context/animation-context';
 import HeaderLogo from './assets/logo.png';
-import Image from 'next/image';
 
 import './base.css';
 
@@ -30,6 +31,8 @@ const phrases = [
   'Outstanding play,',
 ];
 
+// const socket = io(`${process.env.NEXT_PUBLIC_WSS_URL}`);
+
 function AppContent({ Component, pageProps }: AppProps) {
   const { setSeason } = useContext(HeaderContext);
   const { animationRequested, setAnimationRequested } =
@@ -38,20 +41,9 @@ function AppContent({ Component, pageProps }: AppProps) {
   const [phraseNumber, setPhraseNumber] = useState<number | undefined>(
     undefined,
   );
+  // const [isConnected, setIsConnected] = useState(socket.connected);
 
   const { events, pathname, push } = useRouter();
-
-  // const { sendMessage, lastMessage, readyState } = useSocketIO(
-  //   `${process.env.NEXT_PUBLIC_WSS_URL}`,
-  //   {
-  //     shouldReconnect: () => true,
-  //     onOpen: () => {},
-  //     onMessage: async (event) => {},
-  //     retryOnError: true,
-  //     reconnectAttempts: 1000,
-  //     reconnectInterval: () => 3000,
-  //   },
-  // );
 
   const getSeasonAction = useCallback(async () => {
     const { res } = await getSeason();
@@ -83,6 +75,30 @@ function AppContent({ Component, pageProps }: AppProps) {
       }, 500);
     }
   });
+
+  // useEffect(() => {
+  //   function onConnect() {
+  //     setIsConnected(true);
+  //   }
+
+  //   function onDisconnect() {
+  //     setIsConnected(false);
+  //   }
+
+  //   function onFooEvent(value: any) {
+  //     console.log(value);
+  //   }
+
+  //   socket.on('connect', onConnect);
+  //   socket.on('disconnect', onDisconnect);
+  //   socket.on('foo', onFooEvent);
+
+  //   return () => {
+  //     socket.off('connect', onConnect);
+  //     socket.off('disconnect', onDisconnect);
+  //     socket.off('foo', onFooEvent);
+  //   };
+  // }, []);
 
   const getRandomInt = () => {
     const min = 0;

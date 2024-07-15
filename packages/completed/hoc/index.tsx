@@ -40,7 +40,7 @@ export default function Matches({
                 key={`group-${group.split(':').join('-').split('.').join('-')}`}
               >
                 <div className={cn.matchesTitle}>
-                  {`${weekday[new Date(groupedMatches[group][0].date).getDay()]} (${months[new Date(groupedMatches[group][0].date).getMonth()]} ${new Date(groupedMatches[group][0].date).getDate()}${daySuffix(new Date(groupedMatches[group][0].date).getDate())})`}
+                  {`${weekday[new Date(groupedMatches[group][0].date).getDay() + 1]} (${months[new Date(groupedMatches[group][0].date).getMonth()]} ${new Date(groupedMatches[group][0].date).getDate() + 1}${daySuffix(new Date(groupedMatches[group][0].date).getDate())})`}
                 </div>
                 <div className={cn.matchesWrapper}>
                   {groupedMatches[group]?.map((item: MatchProps) => (

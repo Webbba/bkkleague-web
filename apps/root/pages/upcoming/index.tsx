@@ -58,26 +58,26 @@ export async function getServerSideProps() {
   const { res: upcomingMatches } = await getUpcomingMatches();
   const { res: score } = await getScore();
 
-  const currentDate = new Date();
-  currentDate.setHours(0);
-  currentDate.setMinutes(0);
-  currentDate.setSeconds(0);
-  currentDate.setMilliseconds(0);
+  // const currentDate = new Date();
+  // currentDate.setHours(0);
+  // currentDate.setMinutes(0);
+  // currentDate.setSeconds(0);
+  // currentDate.setMilliseconds(0);
 
-  const formatted = upcomingMatches?.filter((item: any) => {
-    const itemDate = new Date(item.date);
-    itemDate.setHours(0);
-    itemDate.setMinutes(0);
-    itemDate.setSeconds(0);
-    itemDate.setMilliseconds(0);
+  // const formatted = upcomingMatches?.filter((item: any) => {
+  //   const itemDate = new Date(item.date);
+  //   itemDate.setHours(0);
+  //   itemDate.setMinutes(0);
+  //   itemDate.setSeconds(0);
+  //   itemDate.setMilliseconds(0);
 
-    return itemDate.getTime() >= currentDate.getTime();
-  });
+  //   return itemDate.getTime() >= currentDate.getTime();
+  // });
 
   return {
     props: {
       fallback: {
-        upcomingMatches: formatted,
+        upcomingMatches: upcomingMatches,
         score: score.data,
       },
     },

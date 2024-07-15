@@ -19,42 +19,20 @@ export default function TodayMatches({
   const [current, setCurrent] = useState<MatchProps[] | undefined>(undefined);
   const [upcoming, setUpcoming] = useState<MatchProps[] | undefined>(undefined);
 
-  const getCurrentMatches = useCallback((upcomingMatches: MatchProps[]) => {
-    const currentMatches: MatchProps[] = [];
+  const getCurrentMatches = useCallback(() => {
+    const currentMatches = matches?.filter((item) => item.inProgress);
 
-    if (upcomingMatches && upcomingMatches.length) {
-      Promise.all(
-        upcomingMatches?.map(async (item) => {
-          const { res } = await getMatch(item.match_id.toString());
+    const filteredUpcoming = matches?.filter((item) =>
+      currentMatches?.every((match) => item.match_id !== match.match_id),
+    );
 
-          if (res && res.data) {
-            const match = upcomingMatches.find(
-              (upcoming) => item.match_id === upcoming.match_id,
-            );
-
-            if (match) {
-              currentMatches.push(match);
-            }
-          }
-        }),
-      );
-
-      if (currentMatches?.length) {
-        const filteredUpcoming = upcomingMatches?.filter((item) =>
-          currentMatches?.every((match) => item.match_id !== match.match_id),
-        );
-
-        setCurrent(currentMatches);
-        setUpcoming(filteredUpcoming);
-      } else {
-        setUpcoming(upcomingMatches);
-      }
-    }
+    setUpcoming(filteredUpcoming);
+    setCurrent(currentMatches);
   }, []);
 
   useEffect(() => {
     if (matches && !upcoming) {
-      getCurrentMatches(matches?.filter((item) => item.match_status_id === 1));
+      getCurrentMatches();
     }
   }, [matches]);
 

@@ -38,7 +38,7 @@ export default function Match({
 
   return (
     <Link
-      href={`/matches/${match?.match_id}/${current ? 'playing' : 'waiting'}?homeTeam=${match?.home_team_id}&awayTeam=${match?.away_team_id}`}
+      href={`/matches/${match?.match_id}/${current || match?.inProgress ? 'playing' : 'waiting'}?homeTeam=${match?.home_team_id}&awayTeam=${match?.away_team_id}`}
       className={cn.match}
       ref={elementRef}
       onClick={(e) => {
@@ -49,7 +49,7 @@ export default function Match({
 
           setTimeout(() => {
             push(
-              `/matches/${match?.match_id}/${current ? 'playing' : 'waiting'}?homeTeam=${match?.home_team_id}&awayTeam=${match?.away_team_id}`,
+              `/matches/${match?.match_id}/${current || match?.inProgress ? 'playing' : 'waiting'}?homeTeam=${match?.home_team_id}&awayTeam=${match?.away_team_id}`,
             );
           }, 500);
         }

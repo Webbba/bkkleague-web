@@ -50,7 +50,7 @@ export default function MissedMatches({ matches }: { matches?: MatchProps[] }) {
                 key={`group-${group.split(':').join('-').split('.').join('-')}`}
               >
                 <div className={cn.matchesTitle}>
-                  {`${weekday[new Date(groupedMissedMatches[group][0].date).getDay()]} (${months[new Date(groupedMissedMatches[group][0].date).getMonth()]} ${new Date(groupedMissedMatches[group][0].date).getDate()}${daySuffix(new Date(groupedMissedMatches[group][0].date).getDate())})`}
+                  {`${weekday[new Date(groupedMissedMatches[group][0].date).getDay() + 1]} (${months[new Date(groupedMissedMatches[group][0].date).getMonth()]} ${new Date(groupedMissedMatches[group][0].date).getDate() + 1}${daySuffix(new Date(groupedMissedMatches[group][0].date).getDate())})`}
                 </div>
                 <div className={cn.matchesWrapper}>
                   {groupedMissedMatches[group]?.map((item: MatchProps) => (

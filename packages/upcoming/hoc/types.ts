@@ -32,6 +32,7 @@ export interface Match {
   away_logo?: string;
   away_team_short_name: string;
   match_status_id: number;
+  inProgress?: boolean;
 }
 
 export interface Score {

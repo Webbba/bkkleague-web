@@ -34,7 +34,7 @@ export default function Waiting({
   const { push, query } = useRouter();
 
   useEffect(() => {
-    if (fallback?.frames && fallback.frames.firstBreak && fallback.match) {
+    if (fallback?.frames && fallback.match) {
       push(`/matches/${query?.id}/playing`);
     }
   }, [fallback?.frames, fallback?.match]);
@@ -87,16 +87,42 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
       query?.awayTeam as string,
     );
 
+    if (
+      homeTeamBestPlayer &&
+      homeTeamBestPlayer?.data &&
+      homeTeamBestPlayer?.data[0]
+    ) {
+      props = {
+        ...props,
+        fallback: {
+          ...props.fallback,
+          homeTeamBestPlayer:
+            homeTeamBestPlayer?.data && homeTeamBestPlayer?.data[0],
+        },
+      };
+    }
+
+    if (
+      awayTeamBestPlayer &&
+      awayTeamBestPlayer?.data &&
+      awayTeamBestPlayer?.data[0]
+    ) {
+      props = {
+        ...props,
+        fallback: {
+          ...props.fallback,
+          awayTeamBestPlayer:
+            awayTeamBestPlayer?.data && awayTeamBestPlayer?.data[0],
+        },
+      };
+    }
+
     props = {
       ...props,
       fallback: {
         ...props.fallback,
         homeTeamStats: homeTeamStats.data,
         awayTeamStats: awayTeamStats.data,
-        homeTeamBestPlayer:
-          homeTeamBestPlayer?.data && homeTeamBestPlayer?.data[0],
-        awayTeamBestPlayer:
-          awayTeamBestPlayer?.data && awayTeamBestPlayer?.data[0],
       },
     };
   }

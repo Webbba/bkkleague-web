@@ -20,11 +20,14 @@ export default function UpcomingMatches({
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  const todayMatches = upcomingMatches?.filter(
-    (item) =>
-      new Date(item.date).toLocaleDateString() ===
-      new Date().toLocaleDateString(),
-  );
+  const todayMatches = upcomingMatches?.filter((item) => {
+    const date = new Date(item.date);
+    date.setDate(date.getDate() + 1);
+
+    return (
+      new Date(date).toLocaleDateString() === new Date().toLocaleDateString()
+    );
+  });
 
   const upcomingDaysMatches = upcomingMatches?.filter(
     (item) =>
@@ -88,7 +91,7 @@ export default function UpcomingMatches({
                     key={`group-${group.split(':').join('-').split('.').join('-')}`}
                   >
                     <div className={cn.upcomingMatchesTitle}>
-                      {`${weekday[new Date(groupedUpcomingMatches[group][0].date).getDay()]} (${months[new Date(groupedUpcomingMatches[group][0].date).getMonth()]} ${new Date(groupedUpcomingMatches[group][0].date).getDate()}${daySuffix(new Date(groupedUpcomingMatches[group][0].date).getDate())})`}
+                      {`${weekday[new Date(groupedUpcomingMatches[group][0].date).getDay() + 1]} (${months[new Date(groupedUpcomingMatches[group][0].date).getMonth()]} ${new Date(groupedUpcomingMatches[group][0].date).getDate() + 1}${daySuffix(new Date(groupedUpcomingMatches[group][0].date).getDate())})`}
                     </div>
                     <div className={cn.upcomingMatchesWrapper}>
                       {groupedUpcomingMatches[group]?.map(
