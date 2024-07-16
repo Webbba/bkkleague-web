@@ -29,11 +29,16 @@ export default function UpcomingMatches({
     );
   });
 
-  const upcomingDaysMatches = upcomingMatches?.filter(
-    (item) =>
-      new Date(item.date).toLocaleDateString() !==
-      new Date().toLocaleDateString(),
-  );
+  console.log(todayMatches);
+
+  const upcomingDaysMatches = upcomingMatches?.filter((item) => {
+    const date = new Date(item.date);
+    date.setDate(date.getDate() + 1);
+
+    return (
+      new Date(date).toLocaleDateString() !== new Date().toLocaleDateString()
+    );
+  });
 
   const groupedMatches = groupBy(
     upcomingDaysMatches,

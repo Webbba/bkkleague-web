@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { SwrConfig, getSeason } from 'api';
 // import { io } from 'socket.io-client';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import useWebSocket, { ReadyState, useSocketIO } from 'react-use-websocket';
 import {
   DefaultStyles,
   HeaderContext as HeaderContextProvider,
@@ -44,6 +44,30 @@ function AppContent({ Component, pageProps }: AppProps) {
   // const [isConnected, setIsConnected] = useState(socket.connected);
 
   const { events, pathname, push } = useRouter();
+
+  const { readyState, sendMessage } = useSocketIO(
+    `${process.env.NEXT_PUBLIC_WSS_URL}`,
+    {
+      share: true,
+      shouldReconnect: () => false,
+      onOpen: () => {},
+      onMessage: async (event) => {},
+      retryOnError: true,
+      reconnectAttempts: 1000,
+      reconnectInterval: () => 3000,
+    },
+    true,
+  );
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+  }[readyState];
+
+  console.log(connectionStatus);
 
   const getSeasonAction = useCallback(async () => {
     const { res } = await getSeason();
