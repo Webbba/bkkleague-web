@@ -13,6 +13,7 @@ export { default as IconPrize } from './hoc/icons/prize';
 // context
 export { default as HeaderContext } from './context/header-context';
 export { default as AnimationContext } from './context/animation-context';
+export { default as SocketContext } from './context/socket-context';
 
 // hooks
 export { default as usePrevious } from './hooks/use-previous';

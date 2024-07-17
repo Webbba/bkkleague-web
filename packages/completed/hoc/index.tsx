@@ -35,12 +35,15 @@ export default function Matches({
             </div>
           )}
           {Object.keys(groupedMatches).map((group) => {
+            const date = new Date(groupedMatches[group][0].date);
+            date.setDate(date.getDate() + 1);
+
             return (
               <div
                 key={`group-${group.split(':').join('-').split('.').join('-')}`}
               >
                 <div className={cn.matchesTitle}>
-                  {`${weekday[new Date(groupedMatches[group][0].date).getDay() + 1]} (${months[new Date(groupedMatches[group][0].date).getMonth()]} ${new Date(groupedMatches[group][0].date).getDate() + 1}${daySuffix(new Date(groupedMatches[group][0].date).getDate())})`}
+                  {`${weekday[date.getDay()]} (${months[date.getMonth()]} ${date.getDate()}${daySuffix(date.getDate())})`}
                 </div>
                 <div className={cn.matchesWrapper}>
                   {groupedMatches[group]?.map((item: MatchProps) => (

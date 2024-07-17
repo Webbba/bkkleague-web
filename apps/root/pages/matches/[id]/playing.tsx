@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { getMatch, getFrames } from 'api';
 import { GetServerSidePropsContext } from 'next/types';
 import Head from 'next/head';
 import { MatchLayout } from 'base-components';
 import { Frame } from 'base-components/types';
+import { useSocketIO } from 'react-use-websocket';
+import { SocketContext } from 'base-components/context/socket-context';
+import { useRouter } from 'next/router';
 
 const isOdd = (num: number) => {
   return num % 2;
@@ -36,6 +39,59 @@ export default function Playing({
       }
     | undefined
   >(undefined);
+
+  const { query } = useRouter();
+
+  const {
+    setIsConnected,
+    setSubscribedMatches,
+    isConnected,
+    subscribedMatches,
+  } = useContext(SocketContext);
+
+  const { sendMessage, lastMessage } = useSocketIO(
+    `${process.env.NEXT_PUBLIC_WSS_URL}`,
+    {
+      share: true,
+      shouldReconnect: () => false,
+      onOpen: () => {
+        if (setSubscribedMatches) {
+          setSubscribedMatches([Number(query.id) as number]);
+        }
+
+        if (setIsConnected) {
+          setIsConnected(true);
+        }
+
+        sendMessage(`42["join", "match_${query.id}"]`);
+      },
+      onMessage: async (event) => {
+        console.log(event);
+      },
+      retryOnError: true,
+      reconnectAttempts: 1000,
+      reconnectInterval: () => 3000,
+    },
+    true,
+  );
+
+  useEffect(() => {
+    if (isConnected) {
+      const nextSuscribedMatches = ([] as number[]).concat(
+        subscribedMatches as number[],
+      );
+
+      if (!nextSuscribedMatches.find((item) => item === Number(query.id))) {
+        nextSuscribedMatches.push(Number(query.id));
+
+        sendMessage(`42["join", "match_${query.id}"]`);
+
+        if (setSubscribedMatches) {
+          setSubscribedMatches(nextSuscribedMatches);
+        }
+      }
+    }
+  }, [isConnected]);
 
   useEffect(() => {
     if (fallback?.frames) {

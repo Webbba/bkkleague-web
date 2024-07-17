@@ -29,8 +29,6 @@ export default function UpcomingMatches({
     );
   });
 
-  console.log(todayMatches);
-
   const upcomingDaysMatches = upcomingMatches?.filter((item) => {
     const date = new Date(item.date);
     date.setDate(date.getDate() + 1);
@@ -91,12 +89,15 @@ export default function UpcomingMatches({
                 </div>
               )}
               {Object.keys(groupedUpcomingMatches).map((group) => {
+                const date = new Date(groupedUpcomingMatches[group][0].date);
+                date.setDate(date.getDate() + 1);
+
                 return (
                   <div
                     key={`group-${group.split(':').join('-').split('.').join('-')}`}
                   >
                     <div className={cn.upcomingMatchesTitle}>
-                      {`${weekday[new Date(groupedUpcomingMatches[group][0].date).getDay() + 1]} (${months[new Date(groupedUpcomingMatches[group][0].date).getMonth()]} ${new Date(groupedUpcomingMatches[group][0].date).getDate() + 1}${daySuffix(new Date(groupedUpcomingMatches[group][0].date).getDate())})`}
+                      {`${weekday[date.getDay()]} (${months[date.getMonth()]} ${date.getDate()}${daySuffix(date.getDate())})`}
                     </div>
                     <div className={cn.upcomingMatchesWrapper}>
                       {groupedUpcomingMatches[group]?.map(

@@ -4,13 +4,14 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { SwrConfig, getSeason } from 'api';
 // import { io } from 'socket.io-client';
-import useWebSocket, { ReadyState, useSocketIO } from 'react-use-websocket';
+import { useSocketIO } from 'react-use-websocket';
 import {
   DefaultStyles,
   HeaderContext as HeaderContextProvider,
   AnimationContext as AnimationContextProvider,
   IconClose,
   IconPrize,
+  SocketContext,
 } from 'base-components';
 import { HeaderContext } from 'base-components/context/header-context';
 import { AnimationContext } from 'base-components/context/animation-context';
@@ -58,16 +59,6 @@ function AppContent({ Component, pageProps }: AppProps) {
     },
     true,
   );
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: 'Connecting',
-    [ReadyState.OPEN]: 'Open',
-    [ReadyState.CLOSING]: 'Closing',
-    [ReadyState.CLOSED]: 'Closed',
-    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-  }[readyState];
-
-  console.log(connectionStatus);
 
   const getSeasonAction = useCallback(async () => {
     const { res } = await getSeason();
@@ -224,9 +215,11 @@ export default function App({ Component, pageProps }: AppProps) {
       <DefaultStyles />
       <HeaderContextProvider>
         <AnimationContextProvider>
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          {/* @ts-ignore */}
-          <AppContent pageProps={pageProps} Component={Component} />
+          <SocketContext>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <AppContent pageProps={pageProps} Component={Component} />
+          </SocketContext>
         </AnimationContextProvider>
       </HeaderContextProvider>
     </SwrConfig>
