@@ -33,7 +33,7 @@ FROM base AS installer
 WORKDIR /app
 
 ARG API_HOST=https://api.bkkleague.com
-ARG WSS_HOST=https://api.bkkleague.com/websockets
+ARG WSS_HOST=https://api.bkkleague.com
 ARG CUSTOMERS_HOST
 ENV API_HOST ${API_HOST}
 ENV WSS_HOST ${WSS_HOST}

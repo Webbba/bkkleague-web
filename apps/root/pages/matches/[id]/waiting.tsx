@@ -10,7 +10,7 @@ import {
 import { GetServerSidePropsContext } from 'next/types';
 import Head from 'next/head';
 import { MatchLayout } from 'base-components';
-// import { useSocketIO } from 'react-use-websocket';
+import { useSocketIO } from 'react-use-websocket';
 import { BestPlayer, Frame, TeamStats } from 'base-components/types';
 import { SocketContext } from 'base-components/context/socket-context';
 import { AnimationContext } from 'base-components/context/animation-context';
@@ -45,49 +45,49 @@ export default function Waiting({
 
   const { setAnimationRequested } = useContext(AnimationContext);
 
-  // const { sendMessage, lastMessage } = useSocketIO(
-  //   `${process.env.NEXT_PUBLIC_WSS_URL}`,
-  //   {
-  //     share: true,
-  //     shouldReconnect: () => false,
-  //     onOpen: () => {
-  //       if (setSubscribedMatches) {
-  //         setSubscribedMatches([Number(query.id) as number]);
-  //       }
+  const { sendMessage, lastMessage } = useSocketIO(
+    `${process.env.NEXT_PUBLIC_WSS_URL}`,
+    {
+      share: true,
+      shouldReconnect: () => false,
+      onOpen: () => {
+        if (setSubscribedMatches) {
+          setSubscribedMatches([Number(query.id) as number]);
+        }
 
-  //       if (setIsConnected) {
-  //         setIsConnected(true);
-  //       }
+        if (setIsConnected) {
+          setIsConnected(true);
+        }
 
-  //       sendMessage(`42["join", "match_${query.id}"]`);
-  //     },
-  //     onMessage: async () => {},
-  //     retryOnError: true,
-  //     reconnectAttempts: 1000,
-  //     reconnectInterval: () => 3000,
-  //   },
-  //   true,
-  // );
+        sendMessage(`42["join", "match_${query.id}"]`);
+      },
+      onMessage: async () => {},
+      retryOnError: true,
+      reconnectAttempts: 1000,
+      reconnectInterval: () => 3000,
+    },
+    true,
+  );
 
-  // useEffect(() => {
-  //   if (lastMessage) {
-  //     if (lastMessage.type === 'match_update') {
-  //       const payload: any = lastMessage.payload;
+  useEffect(() => {
+    if (lastMessage) {
+      if (lastMessage.type === 'match_update') {
+        const payload: any = lastMessage.payload;
 
-  //       if (payload?.type === 'firstbreak') {
-  //         if (setAnimationRequested) {
-  //           setAnimationRequested(true);
-  //         }
+        if (payload?.type === 'firstbreak') {
+          if (setAnimationRequested) {
+            setAnimationRequested(true);
+          }
 
-  //         setTimeout(() => {
-  //           push(
-  //             `/matches/${query.id}/playing?homeTeam=${query?.homeTeam}&awayTeam=${query?.awayTeam}`,
-  //           );
-  //         }, 1500);
-  //       }
-  //     }
-  //   }
-  // }, [lastMessage]);
+          setTimeout(() => {
+            push(
+              `/matches/${query.id}/playing?homeTeam=${query?.homeTeam}&awayTeam=${query?.awayTeam}`,
+            );
+          }, 1500);
+        }
+      }
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
     if (isConnected) {
@@ -98,7 +98,7 @@ export default function Waiting({
       if (!nextSuscribedMatches.find((item) => item === Number(query.id))) {
         nextSuscribedMatches.push(Number(query.id));
 
-        // sendMessage(`42["join", "match_${query.id}"]`);
+        sendMessage(`42["join", "match_${query.id}"]`);
 
         if (setSubscribedMatches) {
           setSubscribedMatches(nextSuscribedMatches);

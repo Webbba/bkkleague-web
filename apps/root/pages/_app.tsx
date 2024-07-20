@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { SwrConfig, getSeason } from 'api';
-// import { useSocketIO } from 'react-use-websocket';
+import { useSocketIO } from 'react-use-websocket';
 import {
   DefaultStyles,
   HeaderContext as HeaderContextProvider,
@@ -19,7 +19,6 @@ import { AnimationContext } from 'base-components/context/animation-context';
 import { PlayerWinnerContext } from 'base-components/context/player-winner-context';
 import { TeamWinnerContext } from 'base-components/context/team-winner-context';
 import HeaderLogo from './assets/logo.png';
-import { socket } from '../socket';
 
 import './base.css';
 
@@ -45,7 +44,6 @@ function AppContent({ Component, pageProps }: AppProps) {
   const [phraseNumber, setPhraseNumber] = useState<number | undefined>(
     undefined,
   );
-  const [isConnected, setIsConnected] = useState(socket.connected);
 
   const { events, pathname, push } = useRouter();
   const { winnerName, setWinnerName, showPlayerWinner, setShowPlayerWinner } =
@@ -53,19 +51,19 @@ function AppContent({ Component, pageProps }: AppProps) {
   const { showTeamWinner, setShowTeamWinner, setWinnerTeam, winnerTeam } =
     useContext(TeamWinnerContext);
 
-  // const { readyState, sendMessage } = useSocketIO(
-  //   `${process.env.NEXT_PUBLIC_WSS_URL}`,
-  //   {
-  //     share: true,
-  //     shouldReconnect: () => false,
-  //     onOpen: () => {},
-  //     onMessage: async (event) => {},
-  //     retryOnError: true,
-  //     reconnectAttempts: 1000,
-  //     reconnectInterval: () => 3000,
-  //   },
-  //   true,
-  // );
+  const { readyState, sendMessage } = useSocketIO(
+    `${process.env.NEXT_PUBLIC_WSS_URL}`,
+    {
+      share: true,
+      shouldReconnect: () => false,
+      onOpen: () => {},
+      onMessage: async (event) => {},
+      retryOnError: true,
+      reconnectAttempts: 1000,
+      reconnectInterval: () => 3000,
+    },
+    true,
+  );
 
   const getSeasonAction = useCallback(async () => {
     const { res } = await getSeason();
@@ -156,19 +154,6 @@ function AppContent({ Component, pageProps }: AppProps) {
       requestAnimationFrame(teamFrame);
     }
   };
-
-  useEffect(() => {
-    socket.on('connect', () => {
-      console.log('connected');
-      setIsConnected(true);
-    });
-    socket.on('frame_update', (data) => {
-      console.log(data);
-    });
-    socket.emit('join', 'match_4003', (response: any) => {
-      console.log(response);
-    });
-  }, []);
 
   useEffect(() => {
     getSeasonAction();
