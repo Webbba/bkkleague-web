@@ -36,8 +36,6 @@ export default function Root({
       onOpen: () => {
         const todayMatches = fallback?.upcomingMatches?.filter((item) => {
           const date = new Date(item.date);
-          date.setDate(date.getDate() + 1);
-
           return (
             new Date(date).toLocaleDateString() ===
             new Date().toLocaleDateString()
@@ -102,7 +100,6 @@ export default function Root({
 
       const todayMatches = fallback?.upcomingMatches?.filter((item) => {
         const date = new Date(item.date);
-        date.setDate(date.getDate() + 1);
         return (
           new Date(date).toLocaleDateString() ===
           new Date().toLocaleDateString()
