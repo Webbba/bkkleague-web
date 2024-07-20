@@ -4,7 +4,7 @@ import { GetServerSidePropsContext } from 'next/types';
 import Head from 'next/head';
 import { MatchLayout } from 'base-components';
 import { Frame } from 'base-components/types';
-import { useSocketIO } from 'react-use-websocket';
+// import { useSocketIO } from 'react-use-websocket';
 import { SocketContext } from 'base-components/context/socket-context';
 import { PlayerWinnerContext } from 'base-components/context/player-winner-context';
 import { TeamWinnerContext } from 'base-components/context/team-winner-context';
@@ -160,29 +160,29 @@ export default function Playing({
     subscribedMatches,
   } = useContext(SocketContext);
 
-  const { sendMessage, lastMessage } = useSocketIO(
-    `${process.env.NEXT_PUBLIC_WSS_URL}`,
-    {
-      share: true,
-      shouldReconnect: () => false,
-      onOpen: () => {
-        if (setSubscribedMatches) {
-          setSubscribedMatches([Number(query.id) as number]);
-        }
+  // const { sendMessage, lastMessage } = useSocketIO(
+  //   `${process.env.NEXT_PUBLIC_WSS_URL}`,
+  //   {
+  //     share: true,
+  //     shouldReconnect: () => false,
+  //     onOpen: () => {
+  //       if (setSubscribedMatches) {
+  //         setSubscribedMatches([Number(query.id) as number]);
+  //       }
 
-        if (setIsConnected) {
-          setIsConnected(true);
-        }
+  //       if (setIsConnected) {
+  //         setIsConnected(true);
+  //       }
 
-        sendMessage(`42["join", "match_${query.id}"]`);
-      },
-      onMessage: async (event) => {},
-      retryOnError: true,
-      reconnectAttempts: 1000,
-      reconnectInterval: () => 3000,
-    },
-    true,
-  );
+  //       sendMessage(`42["join", "match_${query.id}"]`);
+  //     },
+  //     onMessage: async (event) => {},
+  //     retryOnError: true,
+  //     reconnectAttempts: 1000,
+  //     reconnectInterval: () => 3000,
+  //   },
+  //   true,
+  // );
 
   const getFrame = useCallback(
     async (payload: any) => {
@@ -372,164 +372,164 @@ export default function Playing({
     [frames],
   );
 
-  useEffect(() => {
-    if (lastMessage.type === 'frame_update') {
-      const payload: any = lastMessage.payload;
+  // useEffect(() => {
+  //   if (lastMessage.type === 'frame_update') {
+  //     const payload: any = lastMessage.payload;
 
-      if (payload.type === 'players') {
-        getFrame(payload);
-      }
+  //     if (payload.type === 'players') {
+  //       getFrame(payload);
+  //     }
 
-      if (payload.type === 'win') {
-        let payloadFrameIndex = payload.frameIdx;
+  //     if (payload.type === 'win') {
+  //       let payloadFrameIndex = payload.frameIdx;
 
-        if (payload.frameIdx > 4) {
-          payloadFrameIndex = payload.frameIdx - 1;
-        }
+  //       if (payload.frameIdx > 4) {
+  //         payloadFrameIndex = payload.frameIdx - 1;
+  //       }
 
-        if (payload.frameIdx > 8) {
-          payloadFrameIndex = payload.frameIdx - 2;
-        }
+  //       if (payload.frameIdx > 8) {
+  //         payloadFrameIndex = payload.frameIdx - 2;
+  //       }
 
-        if (payload.frameIdx > 12) {
-          payloadFrameIndex = payload.frameIdx - 3;
-        }
+  //       if (payload.frameIdx > 12) {
+  //         payloadFrameIndex = payload.frameIdx - 3;
+  //       }
 
-        if (payload.frameIdx > 18) {
-          payloadFrameIndex = payload.frameIdx - 4;
-        }
+  //       if (payload.frameIdx > 18) {
+  //         payloadFrameIndex = payload.frameIdx - 4;
+  //       }
 
-        const nextFrames: any = { ...frames };
-        const nextFramesData = nextFrames?.frameData?.map((item: any) => {
-          const result = { ...item };
+  //       const nextFrames: any = { ...frames };
+  //       const nextFramesData = nextFrames?.frameData?.map((item: any) => {
+  //         const result = { ...item };
 
-          if (result.frameNumber === payloadFrameIndex + 1) {
-            const side =
-              query.homeTeam === payload.winnerTeamId.toString()
-                ? 'home'
-                : 'away';
+  //         if (result.frameNumber === payloadFrameIndex + 1) {
+  //           const side =
+  //             query.homeTeam === payload.winnerTeamId.toString()
+  //               ? 'home'
+  //               : 'away';
 
-            result.winner = {
-              side: side,
-              teamId: payload.winnerTeamId,
-            };
+  //           result.winner = {
+  //             side: side,
+  //             teamId: payload.winnerTeamId,
+  //           };
 
-            let playerName = '';
-            let secondPlayerName = '';
+  //           let playerName = '';
+  //           let secondPlayerName = '';
 
-            if (side === 'home') {
-              playerName = result?.players?.home[0]?.nickname;
+  //           if (side === 'home') {
+  //             playerName = result?.players?.home[0]?.nickname;
 
-              if (result?.players?.home[0]) {
-                secondPlayerName = result?.players?.home[1]?.nickname;
-              }
-            } else {
-              playerName = result?.players?.away[0]?.nickname;
+  //             if (result?.players?.home[0]) {
+  //               secondPlayerName = result?.players?.home[1]?.nickname;
+  //             }
+  //           } else {
+  //             playerName = result?.players?.away[0]?.nickname;
 
-              if (result?.players?.away[0]) {
-                secondPlayerName = result?.players?.away[1]?.nickname;
-              }
-            }
+  //             if (result?.players?.away[0]) {
+  //               secondPlayerName = result?.players?.away[1]?.nickname;
+  //             }
+  //           }
 
-            if (playerName) {
-              const playerNameArray = playerName.split(' ');
-              let secondPlayerFormatted: string[] = [];
+  //           if (playerName) {
+  //             const playerNameArray = playerName.split(' ');
+  //             let secondPlayerFormatted: string[] = [];
 
-              if (secondPlayerName) {
-                secondPlayerFormatted = secondPlayerName.split(' ');
-              }
+  //             if (secondPlayerName) {
+  //               secondPlayerFormatted = secondPlayerName.split(' ');
+  //             }
 
-              if (setWinnerName) {
-                setWinnerName(
-                  `${playerNameArray[0]}${
-                    secondPlayerFormatted?.length
-                      ? ` & ${secondPlayerFormatted[0]}`
-                      : ''
-                  }`,
-                );
-              }
-            }
-          }
+  //             if (setWinnerName) {
+  //               setWinnerName(
+  //                 `${playerNameArray[0]}${
+  //                   secondPlayerFormatted?.length
+  //                     ? ` & ${secondPlayerFormatted[0]}`
+  //                     : ''
+  //                 }`,
+  //               );
+  //             }
+  //           }
+  //         }
 
-          return result;
-        });
+  //         return result;
+  //       });
 
-        nextFrames.frameData = nextFramesData;
+  //       nextFrames.frameData = nextFramesData;
 
-        setFrames(nextFrames);
+  //       setFrames(nextFrames);
 
-        const awayWinnerScore = nextFramesData?.filter(
-          (frame: any) => frame.winner.side === 'away',
-        );
-        const homeWinnerScore = nextFramesData?.filter(
-          (frame: any) => frame.winner.side === 'home',
-        );
+  //       const awayWinnerScore = nextFramesData?.filter(
+  //         (frame: any) => frame.winner.side === 'away',
+  //       );
+  //       const homeWinnerScore = nextFramesData?.filter(
+  //         (frame: any) => frame.winner.side === 'home',
+  //       );
 
-        console.log(awayWinnerScore.length);
-        console.log(homeWinnerScore.length);
+  //       console.log(awayWinnerScore.length);
+  //       console.log(homeWinnerScore.length);
 
-        if (setShowPlayerWinner) {
-          setShowPlayerWinner(true);
-        }
+  //       if (setShowPlayerWinner) {
+  //         setShowPlayerWinner(true);
+  //       }
 
-        if (homeWinnerScore.length === 11 && setShowTeamWinner) {
-          setShowTeamWinner(true);
+  //       if (homeWinnerScore.length === 11 && setShowTeamWinner) {
+  //         setShowTeamWinner(true);
 
-          if (setWinnerTeam) {
-            setWinnerTeam({
-              name: frames?.teams?.home.name,
-              logo: `${process.env.NEXT_PUBLIC_API_URL}/logos/${frames?.teams?.home.logo}`,
-            });
-          }
-        }
+  //         if (setWinnerTeam) {
+  //           setWinnerTeam({
+  //             name: frames?.teams?.home.name,
+  //             logo: `${process.env.NEXT_PUBLIC_API_URL}/logos/${frames?.teams?.home.logo}`,
+  //           });
+  //         }
+  //       }
 
-        if (awayWinnerScore.length === 11 && setShowTeamWinner) {
-          setShowTeamWinner(true);
+  //       if (awayWinnerScore.length === 11 && setShowTeamWinner) {
+  //         setShowTeamWinner(true);
 
-          if (setWinnerTeam) {
-            setWinnerTeam({
-              name: frames?.teams?.away.name,
-              logo: `${process.env.NEXT_PUBLIC_API_URL}/logos/${frames?.teams?.away.logo}`,
-            });
-          }
-        }
+  //         if (setWinnerTeam) {
+  //           setWinnerTeam({
+  //             name: frames?.teams?.away.name,
+  //             logo: `${process.env.NEXT_PUBLIC_API_URL}/logos/${frames?.teams?.away.logo}`,
+  //           });
+  //         }
+  //       }
 
-        if (payloadFrameIndex + 1 === 4) {
-          setFramePage(1);
-        } else if (payloadFrameIndex + 1 === 8) {
-          setFramePage(2);
-        } else if (payloadFrameIndex + 1 === 12) {
-          setFramePage(3);
-        } else if (payloadFrameIndex + 1 === 16) {
-          setFramePage(4);
-        }
-      }
-    }
+  //       if (payloadFrameIndex + 1 === 4) {
+  //         setFramePage(1);
+  //       } else if (payloadFrameIndex + 1 === 8) {
+  //         setFramePage(2);
+  //       } else if (payloadFrameIndex + 1 === 12) {
+  //         setFramePage(3);
+  //       } else if (payloadFrameIndex + 1 === 16) {
+  //         setFramePage(4);
+  //       }
+  //     }
+  //   }
 
-    if (lastMessage.type === 'match_update') {
-      const payload: any = lastMessage.payload;
+  //   if (lastMessage.type === 'match_update') {
+  //     const payload: any = lastMessage.payload;
 
-      getBreakes(payload?.data?.firstBreak?.toString());
-    }
-  }, [lastMessage, frames, query]);
+  //     getBreakes(payload?.data?.firstBreak?.toString());
+  //   }
+  // }, [lastMessage, frames, query]);
 
-  useEffect(() => {
-    if (isConnected) {
-      const nextSuscribedMatches = ([] as number[]).concat(
-        subscribedMatches as number[],
-      );
+  // useEffect(() => {
+  //   if (isConnected) {
+  //     const nextSuscribedMatches = ([] as number[]).concat(
+  //       subscribedMatches as number[],
+  //     );
 
-      if (!nextSuscribedMatches.find((item) => item === Number(query.id))) {
-        nextSuscribedMatches.push(Number(query.id));
+  //     if (!nextSuscribedMatches.find((item) => item === Number(query.id))) {
+  //       nextSuscribedMatches.push(Number(query.id));
 
-        sendMessage(`42["join", "match_${query.id}"]`);
+  //       sendMessage(`42["join", "match_${query.id}"]`);
 
-        if (setSubscribedMatches) {
-          setSubscribedMatches(nextSuscribedMatches);
-        }
-      }
-    }
-  }, [isConnected]);
+  //       if (setSubscribedMatches) {
+  //         setSubscribedMatches(nextSuscribedMatches);
+  //       }
+  //     }
+  //   }
+  // }, [isConnected]);
 
   useEffect(() => {
     if (fallback?.frames) {

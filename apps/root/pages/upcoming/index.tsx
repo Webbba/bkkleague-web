@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, useContext } from 'react';
 import { Layout } from 'base-components';
 import { Upcoming } from 'upcoming-matches';
 import { getScore, getUpcomingMatches } from 'api';
-import { useSocketIO } from 'react-use-websocket';
+// import { useSocketIO } from 'react-use-websocket';
 import { Match, Score } from 'upcoming-matches/hoc/types';
 
 import Head from 'next/head';
@@ -28,43 +28,43 @@ export default function Root({
     subscribedMatches,
   } = useContext(SocketContext);
 
-  const { sendMessage, lastMessage } = useSocketIO(
-    `${process.env.NEXT_PUBLIC_WSS_URL}`,
-    {
-      share: true,
-      shouldReconnect: () => false,
-      onOpen: () => {
-        const todayMatches = fallback?.upcomingMatches?.filter((item) => {
-          const date = new Date(item.date);
-          date.setDate(date.getDate() + 1);
+  // const { sendMessage, lastMessage } = useSocketIO(
+  //   `${process.env.NEXT_PUBLIC_WSS_URL}`,
+  //   {
+  //     share: true,
+  //     shouldReconnect: () => false,
+  //     onOpen: () => {
+  //       const todayMatches = fallback?.upcomingMatches?.filter((item) => {
+  //         const date = new Date(item.date);
+  //         date.setDate(date.getDate() + 1);
 
-          return (
-            new Date(date).toLocaleDateString() ===
-            new Date().toLocaleDateString()
-          );
-        });
+  //         return (
+  //           new Date(date).toLocaleDateString() ===
+  //           new Date().toLocaleDateString()
+  //         );
+  //       });
 
-        if (todayMatches && todayMatches?.length > 0) {
-          todayMatches.forEach((item) => {
-            setTimeout(() => {
-              sendMessage(`42["join", "match_${item.match_id}"]`);
-            }, 1000);
-          });
-          if (setSubscribedMatches) {
-            setSubscribedMatches(todayMatches?.map((item) => item.match_id));
-          }
-        }
-        if (setIsConnected) {
-          setIsConnected(true);
-        }
-      },
-      onMessage: async () => {},
-      retryOnError: true,
-      reconnectAttempts: 1000,
-      reconnectInterval: () => 3000,
-    },
-    true,
-  );
+  //       if (todayMatches && todayMatches?.length > 0) {
+  //         todayMatches.forEach((item) => {
+  //           setTimeout(() => {
+  //             sendMessage(`42["join", "match_${item.match_id}"]`);
+  //           }, 1000);
+  //         });
+  //         if (setSubscribedMatches) {
+  //           setSubscribedMatches(todayMatches?.map((item) => item.match_id));
+  //         }
+  //       }
+  //       if (setIsConnected) {
+  //         setIsConnected(true);
+  //       }
+  //     },
+  //     onMessage: async () => {},
+  //     retryOnError: true,
+  //     reconnectAttempts: 1000,
+  //     reconnectInterval: () => 3000,
+  //   },
+  //   true,
+  // );
 
   const getScoreAction = useCallback(async () => {
     const { res } = await getScore();
@@ -80,9 +80,9 @@ export default function Root({
     }
   }, []);
 
-  useEffect(() => {
-    console.log(lastMessage);
-  }, [lastMessage]);
+  // useEffect(() => {
+  //   console.log(lastMessage);
+  // }, [lastMessage]);
 
   useEffect(() => {
     if (fallback?.score) {
@@ -109,21 +109,21 @@ export default function Root({
         );
       });
 
-      if (todayMatches && todayMatches?.length > 0) {
-        todayMatches.forEach((item) => {
-          if (!nextSuscribedMatches.find((match) => match === item.match_id)) {
-            setTimeout(() => {
-              sendMessage(`42["join", "match_${item.match_id}"]`);
-            }, 1000);
+      // if (todayMatches && todayMatches?.length > 0) {
+      //   todayMatches.forEach((item) => {
+      //     if (!nextSuscribedMatches.find((match) => match === item.match_id)) {
+      //       setTimeout(() => {
+      //         sendMessage(`42["join", "match_${item.match_id}"]`);
+      //       }, 1000);
 
-            nextSuscribedMatches.push(item.match_id);
-          }
-        });
+      //       nextSuscribedMatches.push(item.match_id);
+      //     }
+      //   });
 
-        if (setSubscribedMatches) {
-          setSubscribedMatches(nextSuscribedMatches);
-        }
-      }
+      //   if (setSubscribedMatches) {
+      //     setSubscribedMatches(nextSuscribedMatches);
+      //   }
+      // }
     }
   }, [isConnected]);
 
