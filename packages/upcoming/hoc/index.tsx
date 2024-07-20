@@ -22,7 +22,6 @@ export default function UpcomingMatches({
 
   const todayMatches = upcomingMatches?.filter((item) => {
     const date = new Date(item.date);
-    date.setDate(date.getDate() + 1);
 
     return (
       new Date(date).toLocaleDateString() === new Date().toLocaleDateString()
@@ -31,7 +30,6 @@ export default function UpcomingMatches({
 
   const upcomingDaysMatches = upcomingMatches?.filter((item) => {
     const date = new Date(item.date);
-    date.setDate(date.getDate() + 1);
 
     return (
       new Date(date).toLocaleDateString() !== new Date().toLocaleDateString()
@@ -90,7 +88,6 @@ export default function UpcomingMatches({
               )}
               {Object.keys(groupedUpcomingMatches).map((group) => {
                 const date = new Date(groupedUpcomingMatches[group][0].date);
-                date.setDate(date.getDate() + 1);
 
                 return (
                   <div

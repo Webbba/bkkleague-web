@@ -36,7 +36,6 @@ export default function Matches({
           )}
           {Object.keys(groupedMatches).map((group) => {
             const date = new Date(groupedMatches[group][0].date);
-            date.setDate(date.getDate() + 1);
 
             return (
               <div

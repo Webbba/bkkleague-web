@@ -46,7 +46,6 @@ export default function MissedMatches({ matches }: { matches?: MatchProps[] }) {
           )}
           {Object.keys(groupedMissedMatches).map((group) => {
             const date = new Date(groupedMatches[group][0].date);
-            date.setDate(date.getDate() + 1);
 
             return (
               <div
