@@ -19,6 +19,7 @@ import { AnimationContext } from 'base-components/context/animation-context';
 import { PlayerWinnerContext } from 'base-components/context/player-winner-context';
 import { TeamWinnerContext } from 'base-components/context/team-winner-context';
 import HeaderLogo from './assets/logo.png';
+import { socket } from './socket';
 
 import './base.css';
 
@@ -44,6 +45,7 @@ function AppContent({ Component, pageProps }: AppProps) {
   const [phraseNumber, setPhraseNumber] = useState<number | undefined>(
     undefined,
   );
+  const [isConnected] = useState(socket.connected);
 
   const { events, pathname, push } = useRouter();
   const { winnerName, setWinnerName, showPlayerWinner, setShowPlayerWinner } =
