@@ -274,7 +274,7 @@
 
 .result-frame {
   width: 13vh;
-  height: 12vh;
+  height: 9vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -394,4 +394,21 @@
   font-weight: 400;
   line-height: 52px;
   text-transform: uppercase;
+}
+
+.versus {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 5vh;
+}
+
+.current-frame {
+  background: linear-gradient(0deg, #7d3cff, #471384);
+
+  & .players-wrapper,
+  & .versus {
+    color: #fff;
+  }
 }

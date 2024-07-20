@@ -50,7 +50,7 @@ export default function Match({
             push(
               `/matches/${missed ? match?.id : match?.match_id}/${missed ? 'missed' : 'completed'}`,
             );
-          }, 500);
+          }, 1500);
         }
       }}
     >

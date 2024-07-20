@@ -51,7 +51,7 @@ export default function Match({
             push(
               `/matches/${match?.match_id}/${current || match?.inProgress ? 'playing' : 'waiting'}?homeTeam=${match?.home_team_id}&awayTeam=${match?.away_team_id}`,
             );
-          }, 500);
+          }, 1500);
         }
       }}
     >

@@ -13,6 +13,7 @@ import { MatchLayout } from 'base-components';
 import { useSocketIO } from 'react-use-websocket';
 import { BestPlayer, Frame, TeamStats } from 'base-components/types';
 import { SocketContext } from 'base-components/context/socket-context';
+import { AnimationContext } from 'base-components/context/animation-context';
 
 export default function Waiting({
   fallback,
@@ -42,6 +43,8 @@ export default function Waiting({
     subscribedMatches,
   } = useContext(SocketContext);
 
+  const { setAnimationRequested } = useContext(AnimationContext);
+
   const { sendMessage, lastMessage } = useSocketIO(
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
     {
@@ -58,15 +61,33 @@ export default function Waiting({
 
         sendMessage(`42["join", "match_${query.id}"]`);
       },
-      onMessage: async (event) => {
-        console.log(event);
-      },
+      onMessage: async () => {},
       retryOnError: true,
       reconnectAttempts: 1000,
       reconnectInterval: () => 3000,
     },
     true,
   );
+
+  useEffect(() => {
+    if (lastMessage) {
+      if (lastMessage.type === 'match_update') {
+        const payload: any = lastMessage.payload;
+
+        if (payload?.type === 'firstbreak') {
+          if (setAnimationRequested) {
+            setAnimationRequested(true);
+          }
+
+          setTimeout(() => {
+            push(
+              `/matches/${query.id}/playing?homeTeam=${query?.homeTeam}&awayTeam=${query?.awayTeam}`,
+            );
+          }, 1500);
+        }
+      }
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
     if (isConnected) {

@@ -67,29 +67,29 @@ export interface Frame {
   frameNumber: number;
   homeTeamBreak?: boolean;
   awayTeamBreak?: boolean;
-  winner: {
+  winner?: {
     side: string;
     teamId: number;
-    name: string;
-    shortName: string;
+    name?: string;
+    shortName?: string;
   };
-  players: {
-    home: [
+  players?: {
+    home?: [
       {
-        playerId: number;
-        nickname: string;
-        firstName: string;
-        lastName: string;
-        avatar: string;
+        playerId?: number;
+        nickname?: string;
+        firstName?: string;
+        lastName?: string;
+        avatar?: string;
       },
     ];
-    away: [
+    away?: [
       {
-        playerId: number;
-        nickname: string;
-        firstName: string;
-        lastName: string;
-        avatar: string;
+        playerId?: number;
+        nickname?: string;
+        firstName?: string;
+        lastName?: string;
+        avatar?: string;
       },
     ];
   };

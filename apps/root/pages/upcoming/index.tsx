@@ -28,7 +28,7 @@ export default function Root({
     subscribedMatches,
   } = useContext(SocketContext);
 
-  const { readyState, sendMessage, lastMessage } = useSocketIO(
+  const { sendMessage, lastMessage } = useSocketIO(
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
     {
       share: true,
@@ -58,7 +58,7 @@ export default function Root({
           setIsConnected(true);
         }
       },
-      onMessage: async (event) => {},
+      onMessage: async () => {},
       retryOnError: true,
       reconnectAttempts: 1000,
       reconnectInterval: () => 3000,
@@ -79,6 +79,10 @@ export default function Root({
       }, 60000);
     }
   }, []);
+
+  useEffect(() => {
+    console.log(lastMessage);
+  }, [lastMessage]);
 
   useEffect(() => {
     if (fallback?.score) {

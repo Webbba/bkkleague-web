@@ -19,7 +19,7 @@ export default function Waiting({
   missed?: boolean;
   frames?: {
     frameData: Frame[];
-    teams: {
+    teams?: {
       home: any;
       away: any;
     };

@@ -141,11 +141,32 @@ html {
 
   & .player-name {
     text-align: center;
-    font-size: 220px;
+    font-size: 200px;
     font-weight: bold;
     line-height: 308px;
     color: #fff;
     text-transform: uppercase;
+
+    &.small-size {
+      font-size: 160px;
+      white-space: nowrap;
+    }
+  }
+}
+
+.winner-logo {
+  & img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  & div {
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    font-size: 20vh;
+    text-transform: uppercase;
+    text-align: center;
   }
 }
 

@@ -33,7 +33,7 @@ export default function MatchLayout({
   playing?: boolean;
   frames?: {
     frameData: Frame[];
-    teams: {
+    teams?: {
       home: any;
       away: any;
     };
@@ -95,7 +95,7 @@ export default function MatchLayout({
 
             setTimeout(() => {
               router.push(url);
-            }, 500);
+            }, 1500);
           }}
         >
           <IconArrowLeft />
@@ -142,6 +142,7 @@ export default function MatchLayout({
           frames={frames}
           framePage={framePage}
           setFramePage={setFramePage}
+          playing={playing}
         />
       )}
     </div>

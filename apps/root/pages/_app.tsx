@@ -3,7 +3,6 @@ import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { SwrConfig, getSeason } from 'api';
-// import { io } from 'socket.io-client';
 import { useSocketIO } from 'react-use-websocket';
 import {
   DefaultStyles,
@@ -12,9 +11,13 @@ import {
   IconClose,
   IconPrize,
   SocketContext,
+  PlayerWinnerContext as PlayerWinnerContextProvider,
+  TeamWinnerContext as TeamWinnerContextProvider,
 } from 'base-components';
 import { HeaderContext } from 'base-components/context/header-context';
 import { AnimationContext } from 'base-components/context/animation-context';
+import { PlayerWinnerContext } from 'base-components/context/player-winner-context';
+import { TeamWinnerContext } from 'base-components/context/team-winner-context';
 import HeaderLogo from './assets/logo.png';
 
 import './base.css';
@@ -32,19 +35,21 @@ const phrases = [
   'Outstanding play,',
 ];
 
-// const socket = io(`${process.env.NEXT_PUBLIC_WSS_URL}`);
-
 function AppContent({ Component, pageProps }: AppProps) {
   const { setSeason } = useContext(HeaderContext);
   const { animationRequested, setAnimationRequested } =
     useContext(AnimationContext);
   const [playerWinPopupVisible, setPlayerWinPopupVisible] = useState(false);
+  const [teamWinPopupVisible, setTeamWinPopupVisible] = useState(false);
   const [phraseNumber, setPhraseNumber] = useState<number | undefined>(
     undefined,
   );
-  // const [isConnected, setIsConnected] = useState(socket.connected);
 
   const { events, pathname, push } = useRouter();
+  const { winnerName, setWinnerName, showPlayerWinner, setShowPlayerWinner } =
+    useContext(PlayerWinnerContext);
+  const { showTeamWinner, setShowTeamWinner, setWinnerTeam, winnerTeam } =
+    useContext(TeamWinnerContext);
 
   const { readyState, sendMessage } = useSocketIO(
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
@@ -87,33 +92,9 @@ function AppContent({ Component, pageProps }: AppProps) {
         if (body && body[0]) {
           body[0].style.overflow = 'initial';
         }
-      }, 500);
+      }, 1500);
     }
   });
-
-  // useEffect(() => {
-  //   function onConnect() {
-  //     setIsConnected(true);
-  //   }
-
-  //   function onDisconnect() {
-  //     setIsConnected(false);
-  //   }
-
-  //   function onFooEvent(value: any) {
-  //     console.log(value);
-  //   }
-
-  //   socket.on('connect', onConnect);
-  //   socket.on('disconnect', onDisconnect);
-  //   socket.on('foo', onFooEvent);
-
-  //   return () => {
-  //     socket.off('connect', onConnect);
-  //     socket.off('disconnect', onDisconnect);
-  //     socket.off('foo', onFooEvent);
-  //   };
-  // }, []);
 
   const getRandomInt = () => {
     const min = 0;
@@ -124,6 +105,7 @@ function AppContent({ Component, pageProps }: AppProps) {
   const colors = ['#bb0000', '#ffffff'];
 
   const end = Date.now() + 10 * 1000;
+  const teamEnd = Date.now() + 60 * 1000;
 
   const frame = () => {
     //@ts-ignore
@@ -149,6 +131,30 @@ function AppContent({ Component, pageProps }: AppProps) {
     }
   };
 
+  const teamFrame = () => {
+    //@ts-ignore
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: colors,
+    });
+
+    //@ts-ignore
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: colors,
+    });
+
+    if (Date.now() < teamEnd) {
+      requestAnimationFrame(teamFrame);
+    }
+  };
+
   useEffect(() => {
     getSeasonAction();
   }, []);
@@ -160,13 +166,52 @@ function AppContent({ Component, pageProps }: AppProps) {
   }, [pathname]);
 
   useEffect(() => {
+    if (teamWinPopupVisible) {
+      setTimeout(() => {
+        setTeamWinPopupVisible(false);
+
+        if (setShowTeamWinner) {
+          setShowTeamWinner(false);
+        }
+
+        if (setWinnerTeam) {
+          setWinnerTeam({ name: '', logo: '' });
+        }
+      }, 60500);
+    }
+  }, [teamWinPopupVisible]);
+
+  useEffect(() => {
     if (playerWinPopupVisible) {
       setTimeout(() => {
         setPlayerWinPopupVisible(false);
         setPhraseNumber(undefined);
+
+        if (setShowPlayerWinner) {
+          setShowPlayerWinner(false);
+        }
+
+        if (setWinnerName) {
+          setWinnerName('');
+        }
       }, 10500);
     }
   }, [playerWinPopupVisible]);
+
+  useEffect(() => {
+    if (showPlayerWinner) {
+      setPhraseNumber(getRandomInt());
+      setPlayerWinPopupVisible(true);
+      frame();
+    }
+  }, [showPlayerWinner]);
+
+  useEffect(() => {
+    if (showTeamWinner) {
+      setTeamWinPopupVisible(true);
+      teamFrame();
+    }
+  }, [showPlayerWinner]);
 
   return (
     <div className="wrapper" id="wrapper">
@@ -202,7 +247,32 @@ function AppContent({ Component, pageProps }: AppProps) {
         {phraseNumber !== undefined && (
           <div className="text">{phrases[phraseNumber]}</div>
         )}
-        <div className="player-name">Simon</div>
+        <div
+          className={`player-name ${
+            winnerName && winnerName?.split('&')?.length > 0 ? 'small-size' : ''
+          }`}
+        >
+          {winnerName}
+        </div>
+      </div>
+      <div
+        className={`player-win-popup ${
+          teamWinPopupVisible ? 'show-popup' : ''
+        }`}
+      >
+        <button
+          className="close-button"
+          onClick={() => {
+            setTeamWinPopupVisible(false);
+          }}
+        >
+          <IconClose />
+        </button>
+        <div className="winner-logo">
+          {winnerTeam?.logo && <img src={winnerTeam.logo as string} />}
+          {!winnerTeam?.logo && <div>{winnerTeam?.name}</div>}
+        </div>
+        <div className="player-name">Is Winner!</div>
       </div>
       <Component {...pageProps} />
     </div>
@@ -216,9 +286,13 @@ export default function App({ Component, pageProps }: AppProps) {
       <HeaderContextProvider>
         <AnimationContextProvider>
           <SocketContext>
-            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-            {/* @ts-ignore */}
-            <AppContent pageProps={pageProps} Component={Component} />
+            <PlayerWinnerContextProvider>
+              <TeamWinnerContextProvider>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <AppContent pageProps={pageProps} Component={Component} />
+              </TeamWinnerContextProvider>
+            </PlayerWinnerContextProvider>
           </SocketContext>
         </AnimationContextProvider>
       </HeaderContextProvider>

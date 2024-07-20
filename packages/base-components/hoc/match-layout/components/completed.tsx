@@ -9,17 +9,19 @@ export default function Completed({
   frames,
   framePage,
   setFramePage,
+  playing,
 }: {
   frames?: {
     firstBreak?: string;
     frameData: Frame[];
-    teams: {
+    teams?: {
       home: any;
       away: any;
     };
   };
   framePage?: number;
   setFramePage?: (data: number) => void;
+  playing?: boolean;
 }) {
   const [currentFrames, setCurrentFrames] = useState<Frame[]>([]);
 
@@ -36,11 +38,11 @@ export default function Completed({
 
   const homeFrames =
     frames?.frameData?.filter(
-      (item) => item.winner?.teamId === frames?.teams?.home?.id,
+      (item) => item?.winner?.teamId === frames?.teams?.home?.id,
     )?.length || 0;
   const awayFrames =
     frames?.frameData?.filter(
-      (item) => item.winner?.teamId === frames?.teams?.away?.id,
+      (item) => item?.winner?.teamId === frames?.teams?.away?.id,
     )?.length || 0;
 
   const homeLogo = frames?.teams?.home.logo
@@ -106,17 +108,35 @@ export default function Completed({
         </div>
       </div>
       <div className={cn.framesWrapper}>
-        {currentFrames?.map((item) => (
-          <FrameItem
-            key={item.frameNumber}
-            frame={item}
-            homeTeamId={frames?.teams?.home?.id as number}
-            awayTeamId={frames?.teams?.away?.id as number}
-            framesLength={currentFrames?.length}
-          />
-        ))}
+        {currentFrames?.map((item, index) => {
+          let currentFrame;
+
+          if (
+            currentFrames.find(
+              (frame) =>
+                frame.frameNumber === item.frameNumber - 1 && frame.winner,
+            ) &&
+            !item.winner
+          ) {
+            currentFrame = index;
+          } else if (!item.winner) {
+            currentFrame = 0;
+          }
+
+          return (
+            <FrameItem
+              key={item.frameNumber}
+              frame={item}
+              homeTeamId={frames?.teams?.home?.id as number}
+              awayTeamId={frames?.teams?.away?.id as number}
+              framesLength={currentFrames?.length}
+              playing={playing}
+              currentFrame={Boolean(currentFrame === index)}
+            />
+          );
+        })}
         {!currentFrames.length && (
-          <div className={cn.emptyFrames}>Waiting for Match Start</div>
+          <div className={cn.emptyFrames}>Waiting for Players</div>
         )}
       </div>
       <div className={cn.framesPagination}>

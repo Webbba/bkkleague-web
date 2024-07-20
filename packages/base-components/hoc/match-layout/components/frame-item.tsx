@@ -9,14 +9,20 @@ export default function FrameItem({
   awayTeamId,
   homeTeamId,
   framesLength,
+  playing,
+  currentFrame,
 }: {
   frame?: FrameProps;
   homeTeamId: number;
   awayTeamId: number;
   framesLength?: number;
+  playing?: boolean;
+  currentFrame?: boolean;
 }) {
   return (
-    <div className={`${cn.frame} ${framesLength === 4 ? cn.fullHeight : ''}`}>
+    <div
+      className={`${cn.frame} ${framesLength === 4 ? cn.fullHeight : ''} ${playing && currentFrame ? cn.currentFrame : ''}`}
+    >
       <div className={cn.frameLeft}>
         <div className={cn.breakWrapper}>
           {frame?.homeTeamBreak ? (
@@ -30,15 +36,20 @@ export default function FrameItem({
             {frame?.players?.home
               ?.map((item) => item?.nickname || 'Guest')
               ?.join(' & ')}
+            {(!frame?.players?.home || !frame?.players?.home.length) &&
+              'Waiting Player'}
           </span>
         </div>
-        <div className={cn.resultFameWrapper}>
-          <div
-            className={`${cn.resultFrame} ${cn.homeResult} ${frame?.winner.teamId === homeTeamId ? cn.winner : ''}`}
-          >
-            {frame?.winner.teamId === homeTeamId ? 'Win' : 'Lose'}
+        {frame?.winner && (
+          <div className={cn.resultFameWrapper}>
+            <div
+              className={`${cn.resultFrame} ${cn.homeResult} ${frame?.winner?.teamId === homeTeamId ? cn.winner : ''}`}
+            >
+              {frame?.winner?.teamId === homeTeamId ? 'Win' : 'Lose'}
+            </div>
           </div>
-        </div>
+        )}
+        {!frame?.winner && <div className={cn.versus}>V</div>}
       </div>
       <div className={cn.frameRight}>
         <div className={cn.breakWrapper}>
@@ -53,15 +64,20 @@ export default function FrameItem({
             {frame?.players?.away
               ?.map((item) => item?.nickname || 'Guest')
               ?.join(' & ')}
+            {(!frame?.players?.away || !frame?.players?.away.length) &&
+              'Waiting Player'}
           </span>
         </div>
-        <div className={cn.resultFameWrapper}>
-          <div
-            className={`${cn.resultFrame} ${cn.awayResult} ${frame?.winner.teamId === awayTeamId ? cn.winner : ''}`}
-          >
-            {frame?.winner.teamId === awayTeamId ? 'Win' : 'Lose'}
+        {frame?.winner && (
+          <div className={cn.resultFameWrapper}>
+            <div
+              className={`${cn.resultFrame} ${cn.awayResult} ${frame?.winner?.teamId === awayTeamId ? cn.winner : ''}`}
+            >
+              {frame?.winner?.teamId === awayTeamId ? 'Win' : 'Lose'}
+            </div>
           </div>
-        </div>
+        )}
+        {!frame?.winner && <div className={cn.versus}>S</div>}
       </div>
     </div>
   );
