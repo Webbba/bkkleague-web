@@ -10,7 +10,7 @@ import {
   AnimationContext as AnimationContextProvider,
   IconClose,
   IconPrize,
-  SocketContext,
+  SocketContext as SocketContextProvier,
   PlayerWinnerContext as PlayerWinnerContextProvider,
   TeamWinnerContext as TeamWinnerContextProvider,
   ActiveTabContext as ActiveTabContextProvider,
@@ -23,6 +23,7 @@ import { TeamWinnerContext } from 'base-components/context/team-winner-context';
 import HeaderLogo from './assets/logo.png';
 
 import './base.css';
+import { SocketContext } from 'base-components/context/socket-context';
 
 const phrases = [
   'Easy for',
@@ -54,13 +55,18 @@ function AppContent({ Component, pageProps }: AppProps) {
     useContext(PlayerWinnerContext);
   const { showTeamWinner, setShowTeamWinner, setWinnerTeam, winnerTeam } =
     useContext(TeamWinnerContext);
+  const { setIsConnected } = useContext(SocketContext);
 
   useSocketIO(
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
     {
       share: true,
       shouldReconnect: () => false,
-      onOpen: () => {},
+      onOpen: () => {
+        if (setIsConnected) {
+          setIsConnected(true);
+        }
+      },
       onMessage: async (event) => {},
       retryOnError: true,
       reconnectAttempts: 1000,
@@ -298,7 +304,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <HeaderContextProvider>
         <AnimationContextProvider>
           <ActiveTabContextProvider>
-            <SocketContext>
+            <SocketContextProvier>
               <PlayerWinnerContextProvider>
                 <TeamWinnerContextProvider>
                   {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
@@ -306,7 +312,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   <AppContent pageProps={pageProps} Component={Component} />
                 </TeamWinnerContextProvider>
               </PlayerWinnerContextProvider>
-            </SocketContext>
+            </SocketContextProvier>
           </ActiveTabContextProvider>
         </AnimationContextProvider>
       </HeaderContextProvider>
