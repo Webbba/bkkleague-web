@@ -488,7 +488,11 @@ export default function Playing({
           playerWinForTeamWin = 14;
         }
 
-        if (setShowPlayerWinner) {
+        if (
+          setShowPlayerWinner &&
+          homeWinnerScore.length !== playerWinForTeamWin &&
+          awayWinnerScore.length !== playerWinForTeamWin
+        ) {
           setShowPlayerWinner(true);
         }
 
