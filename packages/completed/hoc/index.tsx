@@ -17,7 +17,10 @@ export default function Matches({
 
   if (matches && matches.length > 0) {
     content = matches?.map((item, index) => {
-      const currentDate = new Date(item.date);
+      const currentDateOffset = new Date(item.date).getTimezoneOffset();
+      const dateUTC =
+        new Date(item.date).getTime() + currentDateOffset * 60 * 1000;
+      const dateICT = new Date(dateUTC + 7 * 60 * 68 * 1000);
 
       const groupedMatches = groupBy(
         item.matches,
@@ -28,21 +31,27 @@ export default function Matches({
         <div className={cn.matchWrapper} key={`${item.date}-${index}`}>
           {(!matches[index - 1] ||
             (matches[index - 1] &&
-              months[currentDate.getMonth()] !==
+              months[dateICT.getMonth()] !==
                 months[new Date(matches[index - 1]?.date).getMonth()])) && (
             <div className={cn.matchDate}>
-              {`${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
+              {`${months[dateICT.getMonth()]} ${dateICT.getFullYear()}`}
             </div>
           )}
           {Object.keys(groupedMatches).map((group) => {
-            const date = new Date(groupedMatches[group][0].date);
+            const dateOffset = new Date(
+              groupedMatches[group][0].date,
+            ).getTimezoneOffset();
+            const dateUTC =
+              new Date(groupedMatches[group][0].date).getTime() +
+              dateOffset * 60 * 1000;
+            const dateICT = new Date(dateUTC + 7 * 60 * 68 * 1000);
 
             return (
               <div
                 key={`group-${group.split(':').join('-').split('.').join('-')}`}
               >
                 <div className={cn.matchesTitle}>
-                  {`${weekday[date.getDay()]} (${months[date.getMonth()]} ${date.getDate()}${daySuffix(date.getDate())})`}
+                  {`${weekday[dateICT.getDay()]} (${months[dateICT.getMonth()]} ${dateICT.getDate()}${daySuffix(dateICT.getDate())})`}
                 </div>
                 <div className={cn.matchesWrapper}>
                   {groupedMatches[group]?.map((item: MatchProps) => (

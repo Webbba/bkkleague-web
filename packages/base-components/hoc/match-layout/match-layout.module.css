@@ -13,9 +13,27 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 0 4vh;
+  position: relative;
 
   &.with-border {
     border-bottom: 1px solid #c0c0c0;
+  }
+}
+
+.icon-achivment-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  height: 100%;
+
+  &.home-winner {
+    left: 20%;
+  }
+
+  &.away-winner {
+    right: 20%;
   }
 }
 

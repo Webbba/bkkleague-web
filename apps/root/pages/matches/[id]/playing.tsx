@@ -2,12 +2,13 @@ import { useEffect, useState, useContext, useCallback } from 'react';
 import { getMatch, getFrames, getPlayer } from 'api';
 import { GetServerSidePropsContext } from 'next/types';
 import Head from 'next/head';
-import { MatchLayout } from 'base-components';
+import { MatchLayout, usePrevious } from 'base-components';
 import { Frame } from 'base-components/types';
-import { useSocketIO } from 'react-use-websocket';
+import { ReadyState, useSocketIO } from 'react-use-websocket';
 import { SocketContext } from 'base-components/context/socket-context';
 import { PlayerWinnerContext } from 'base-components/context/player-winner-context';
 import { TeamWinnerContext } from 'base-components/context/team-winner-context';
+import { ActiveTabContext } from 'base-components/context/active-tab-context';
 import { useRouter } from 'next/router';
 
 const isOdd = (num: number) => {
@@ -16,108 +17,6 @@ const isOdd = (num: number) => {
 
 const defaultFramesData = {
   firstBreak: '',
-  frameData: [
-    {
-      frameNumber: 1,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 2,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 3,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 4,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 5,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 6,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 7,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 8,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 9,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 10,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 11,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 12,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 13,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 14,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 15,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 16,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 17,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 18,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 19,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-    {
-      frameNumber: 20,
-      homeTeamBreak: false,
-      awayTeamBreak: false,
-    },
-  ],
 };
 
 export default function Playing({
@@ -127,6 +26,7 @@ export default function Playing({
     frames: {
       firstBreak: string;
       frameData: Frame[];
+      gameType: string;
       teams: {
         home: any;
         away: any;
@@ -139,7 +39,7 @@ export default function Playing({
   const [frames, setFrames] = useState<
     | {
         firstBreak?: string;
-        frameData: Frame[];
+        frameData?: Frame[];
         teams?: {
           home: any;
           away: any;
@@ -160,7 +60,9 @@ export default function Playing({
     subscribedMatches,
   } = useContext(SocketContext);
 
-  const { sendMessage, lastMessage } = useSocketIO(
+  const { focused } = useContext(ActiveTabContext);
+
+  const { sendMessage, lastMessage, readyState } = useSocketIO(
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
     {
       share: true,
@@ -181,8 +83,115 @@ export default function Playing({
       reconnectAttempts: 1000,
       reconnectInterval: () => 3000,
     },
-    true,
+    focused,
   );
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+  }[readyState];
+
+  const prevConnectionStatus = usePrevious(connectionStatus);
+
+  const setFramesData = useCallback((frameResponse: any) => {
+    const nextFrames: any = { ...frames };
+
+    const framesData: any[] = [];
+    let framesCounts = 0;
+
+    if (fallback?.frames?.gameType === '8b') {
+      framesCounts = 20;
+    } else if (fallback?.frames?.gameType === '9b') {
+      framesCounts = 27;
+    }
+
+    for (let i = 1; i <= framesCounts; i++) {
+      framesData.push({
+        frameNumber: i,
+        homeTeamBreak: false,
+        awayTeamBreak: false,
+      });
+    }
+
+    nextFrames.frameData = framesData;
+
+    const nextFramesMatches = nextFrames?.frameData?.map(
+      (item: any, index: number) => {
+        let result = { ...item };
+
+        if (
+          fallback?.frames.frameData.find(
+            (frame) => frame.frameNumber === result.frameNumber,
+          )
+        ) {
+          const currentFrame = fallback?.frames.frameData.find(
+            (frame) => frame.frameNumber === result.frameNumber,
+          );
+
+          result = currentFrame;
+        }
+
+        if (fallback?.frames.firstBreak === 'home') {
+          if (isOdd(index) === 0) {
+            result.homeTeamBreak = true;
+            result.awayTeamBreak = false;
+          } else {
+            result.awayTeamBreak = true;
+            result.homeTeamBreak = false;
+          }
+        } else if (fallback?.frames.firstBreak === 'away') {
+          if (isOdd(index) === 0) {
+            result.awayTeamBreak = true;
+            result.homeTeamBreak = false;
+          } else {
+            result.homeTeamBreak = true;
+            result.awayTeamBreak = false;
+          }
+        }
+
+        return result;
+      },
+    );
+
+    nextFrames.frameData = nextFramesMatches;
+    nextFrames.firstBreak = fallback?.frames.firstBreak;
+    nextFrames.teams = fallback?.frames?.teams;
+
+    const framesLength = fallback?.frames.frameData?.filter(
+      (item) => item.winner,
+    ).length;
+
+    if (framesLength) {
+      if (framesLength >= 4) {
+        setFramePage(1);
+      }
+
+      if (framesLength >= 8) {
+        setFramePage(2);
+      }
+
+      if (framesLength >= 12) {
+        setFramePage(3);
+      }
+
+      if (framesLength >= 16) {
+        setFramePage(4);
+      }
+    }
+
+    setFrames(nextFrames);
+  }, []);
+
+  const reconnectRequest = useCallback(async () => {
+    const { res: framesResponse } = await getFrames(query?.id as string);
+
+    if (framesResponse && framesResponse.data) {
+      setFramesData(framesResponse.data);
+    }
+  }, []);
 
   const getFrame = useCallback(
     async (payload: any) => {
@@ -459,20 +468,26 @@ export default function Playing({
         setFrames(nextFrames);
 
         const awayWinnerScore = nextFramesData?.filter(
-          (frame: any) => frame.winner.side === 'away',
+          (frame: any) => frame?.winner?.side === 'away',
         );
         const homeWinnerScore = nextFramesData?.filter(
-          (frame: any) => frame.winner.side === 'home',
+          (frame: any) => frame?.winner?.side === 'home',
         );
 
-        console.log(awayWinnerScore.length);
-        console.log(homeWinnerScore.length);
+        let playerWinForTeamWin = 11;
+
+        if (fallback?.frames?.gameType === '9b') {
+          playerWinForTeamWin = 14;
+        }
 
         if (setShowPlayerWinner) {
           setShowPlayerWinner(true);
         }
 
-        if (homeWinnerScore.length === 11 && setShowTeamWinner) {
+        if (
+          homeWinnerScore.length === playerWinForTeamWin &&
+          setShowTeamWinner
+        ) {
           setShowTeamWinner(true);
 
           if (setWinnerTeam) {
@@ -483,7 +498,10 @@ export default function Playing({
           }
         }
 
-        if (awayWinnerScore.length === 11 && setShowTeamWinner) {
+        if (
+          awayWinnerScore.length === playerWinForTeamWin &&
+          setShowTeamWinner
+        ) {
           setShowTeamWinner(true);
 
           if (setWinnerTeam) {
@@ -514,6 +532,33 @@ export default function Playing({
   }, [lastMessage, frames, query]);
 
   useEffect(() => {
+    if (
+      prevConnectionStatus !== connectionStatus &&
+      prevConnectionStatus === 'Closed'
+    ) {
+      reconnectRequest();
+
+      if (setIsConnected) {
+        setIsConnected(true);
+      }
+
+      const nextSuscribedMatches = ([] as number[]).concat(
+        subscribedMatches as number[],
+      );
+
+      if (!nextSuscribedMatches.find((item) => item === Number(query.id))) {
+        nextSuscribedMatches.push(Number(query.id));
+
+        if (setSubscribedMatches) {
+          setSubscribedMatches(nextSuscribedMatches);
+        }
+
+        sendMessage(`42["join", "match_${query.id}"]`);
+      }
+    }
+  }, [prevConnectionStatus, connectionStatus, subscribedMatches]);
+
+  useEffect(() => {
     if (isConnected) {
       const nextSuscribedMatches = ([] as number[]).concat(
         subscribedMatches as number[],
@@ -522,82 +567,18 @@ export default function Playing({
       if (!nextSuscribedMatches.find((item) => item === Number(query.id))) {
         nextSuscribedMatches.push(Number(query.id));
 
-        sendMessage(`42["join", "match_${query.id}"]`);
-
         if (setSubscribedMatches) {
           setSubscribedMatches(nextSuscribedMatches);
         }
+
+        sendMessage(`42["join", "match_${query.id}"]`);
       }
     }
   }, [isConnected]);
 
   useEffect(() => {
     if (fallback?.frames) {
-      const nextFrames: any = { ...frames };
-
-      const nextFramesMatches = nextFrames?.frameData?.map(
-        (item: any, index: number) => {
-          let result = { ...item };
-
-          if (
-            fallback?.frames.frameData.find(
-              (frame) => frame.frameNumber === result.frameNumber,
-            )
-          ) {
-            const currentFrame = fallback?.frames.frameData.find(
-              (frame) => frame.frameNumber === result.frameNumber,
-            );
-
-            result = currentFrame;
-          }
-
-          if (fallback?.frames.firstBreak === 'home') {
-            if (isOdd(index) === 0) {
-              result.homeTeamBreak = true;
-              result.awayTeamBreak = false;
-            } else {
-              result.awayTeamBreak = true;
-              result.homeTeamBreak = false;
-            }
-          } else if (fallback?.frames.firstBreak === 'away') {
-            if (isOdd(index) === 0) {
-              result.awayTeamBreak = true;
-              result.homeTeamBreak = false;
-            } else {
-              result.homeTeamBreak = true;
-              result.awayTeamBreak = false;
-            }
-          }
-
-          return result;
-        },
-      );
-
-      nextFrames.frameData = nextFramesMatches;
-      nextFrames.firstBreak = fallback?.frames.firstBreak;
-      nextFrames.teams = fallback?.frames?.teams;
-
-      const framesLength = fallback?.frames.frameData?.filter(
-        (item) => item.winner,
-      ).length;
-
-      if (framesLength >= 4) {
-        setFramePage(1);
-      }
-
-      if (framesLength >= 8) {
-        setFramePage(2);
-      }
-
-      if (framesLength >= 12) {
-        setFramePage(3);
-      }
-
-      if (framesLength >= 16) {
-        setFramePage(4);
-      }
-
-      setFrames(nextFrames);
+      setFramesData(fallback?.frames);
     }
   }, [fallback?.frames]);
 
@@ -611,6 +592,7 @@ export default function Playing({
         currentMatch={fallback?.match}
         framePage={framePage}
         setFramePage={setFramePage}
+        gameType={fallback?.frames?.gameType}
         playing
       />
     </>

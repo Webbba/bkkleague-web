@@ -21,19 +21,21 @@ export default function UpcomingMatches({
   const currentYear = new Date().getFullYear();
 
   const todayMatches = upcomingMatches?.filter((item) => {
-    const date = new Date(item.date);
+    const dateOffset = new Date(item.date).getTimezoneOffset();
+    const dateUTC = new Date(item.date).getTime() + dateOffset * 60 * 1000;
+    const dateICT = dateUTC + 7 * 60 * 68 * 1000;
 
-    return (
-      new Date(date).toLocaleDateString() === new Date().toLocaleDateString()
-    );
+    return new Date(dateICT).toLocaleString() === new Date().toLocaleString();
   });
 
   const upcomingDaysMatches = upcomingMatches?.filter((item) => {
     const date = new Date(item.date);
 
-    return (
-      new Date(date).toLocaleDateString() !== new Date().toLocaleDateString()
-    );
+    const dateOffset = new Date(item.date).getTimezoneOffset();
+    const dateUTC = new Date(item.date).getTime() + dateOffset * 60 * 1000;
+    const dateICT = dateUTC + 7 * 60 * 68 * 1000;
+
+    return new Date(dateICT).toLocaleString() !== new Date().toLocaleString();
   });
 
   const groupedMatches = groupBy(
@@ -67,7 +69,10 @@ export default function UpcomingMatches({
         className={`${cn.otherUpcomingMatches} ${!todayMatches?.length ? cn.withoutPadding : ''}`}
       >
         {nextUpcomingMatches?.map((item, index) => {
-          const currentDate = new Date(item.date);
+          const currentDateOffset = new Date(item.date).getTimezoneOffset();
+          const dateUTC =
+            new Date(item.date).getTime() + currentDateOffset * 60 * 1000;
+          const dateICT = new Date(dateUTC + 7 * 60 * 68 * 1000);
 
           const groupedUpcomingMatches = groupBy(
             item.matches,
@@ -78,28 +83,40 @@ export default function UpcomingMatches({
             <div className={cn.matchWrapper} key={`${item.date}-${index}`}>
               {(!nextUpcomingMatches[index - 1] ||
                 (nextUpcomingMatches[index - 1] &&
-                  months[currentDate.getMonth()] !==
+                  months[dateICT.getMonth()] !==
                     months[
                       new Date(nextUpcomingMatches[index - 1]?.date).getMonth()
                     ])) && (
                 <div className={cn.matchDate}>
-                  {`${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
+                  {`${months[dateICT.getMonth()]} ${dateICT.getFullYear()}`}
                 </div>
               )}
               {Object.keys(groupedUpcomingMatches).map((group) => {
-                const date = new Date(groupedUpcomingMatches[group][0].date);
+                const dateOffset = new Date(
+                  groupedUpcomingMatches[group][0].date,
+                ).getTimezoneOffset();
+                const dateUTC =
+                  new Date(groupedUpcomingMatches[group][0].date).getTime() +
+                  dateOffset * 60 * 1000;
+                const dateICT = new Date(dateUTC + 7 * 60 * 68 * 1000);
 
                 return (
                   <div
                     key={`group-${group.split(':').join('-').split('.').join('-')}`}
                   >
                     <div className={cn.upcomingMatchesTitle}>
-                      {`${weekday[date.getDay()]} (${months[date.getMonth()]} ${date.getDate()}${daySuffix(date.getDate())})`}
+                      {`${weekday[dateICT.getDay()]} (${months[dateICT.getMonth()]} ${dateICT.getDate()}${daySuffix(dateICT.getDate())})`}
                     </div>
                     <div className={cn.upcomingMatchesWrapper}>
                       {groupedUpcomingMatches[group]?.map(
                         (item: MatchProps) => (
-                          <Match key={item.match_id} match={item} />
+                          <Match
+                            key={item.match_id}
+                            match={item}
+                            score={score?.find(
+                              (score) => item.match_id === score.id,
+                            )}
+                          />
                         ),
                       )}
                     </div>

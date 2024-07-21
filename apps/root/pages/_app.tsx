@@ -13,8 +13,10 @@ import {
   SocketContext,
   PlayerWinnerContext as PlayerWinnerContextProvider,
   TeamWinnerContext as TeamWinnerContextProvider,
+  ActiveTabContext as ActiveTabContextProvider,
 } from 'base-components';
 import { HeaderContext } from 'base-components/context/header-context';
+import { ActiveTabContext } from 'base-components/context/active-tab-context';
 import { AnimationContext } from 'base-components/context/animation-context';
 import { PlayerWinnerContext } from 'base-components/context/player-winner-context';
 import { TeamWinnerContext } from 'base-components/context/team-winner-context';
@@ -45,13 +47,15 @@ function AppContent({ Component, pageProps }: AppProps) {
     undefined,
   );
 
+  const { focused } = useContext(ActiveTabContext);
+
   const { events, pathname, push } = useRouter();
   const { winnerName, setWinnerName, showPlayerWinner, setShowPlayerWinner } =
     useContext(PlayerWinnerContext);
   const { showTeamWinner, setShowTeamWinner, setWinnerTeam, winnerTeam } =
     useContext(TeamWinnerContext);
 
-  const { readyState, sendMessage } = useSocketIO(
+  useSocketIO(
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
     {
       share: true,
@@ -62,7 +66,7 @@ function AppContent({ Component, pageProps }: AppProps) {
       reconnectAttempts: 1000,
       reconnectInterval: () => 3000,
     },
-    true,
+    focused,
   );
 
   const getSeasonAction = useCallback(async () => {
@@ -177,6 +181,14 @@ function AppContent({ Component, pageProps }: AppProps) {
         if (setWinnerTeam) {
           setWinnerTeam({ name: '', logo: '' });
         }
+
+        if (setAnimationRequested) {
+          setAnimationRequested(true);
+        }
+
+        setTimeout(() => {
+          push('/upcoming');
+        }, 1500);
       }, 60500);
     }
   }, [teamWinPopupVisible]);
@@ -285,15 +297,17 @@ export default function App({ Component, pageProps }: AppProps) {
       <DefaultStyles />
       <HeaderContextProvider>
         <AnimationContextProvider>
-          <SocketContext>
-            <PlayerWinnerContextProvider>
-              <TeamWinnerContextProvider>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <AppContent pageProps={pageProps} Component={Component} />
-              </TeamWinnerContextProvider>
-            </PlayerWinnerContextProvider>
-          </SocketContext>
+          <ActiveTabContextProvider>
+            <SocketContext>
+              <PlayerWinnerContextProvider>
+                <TeamWinnerContextProvider>
+                  {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                  {/* @ts-ignore */}
+                  <AppContent pageProps={pageProps} Component={Component} />
+                </TeamWinnerContextProvider>
+              </PlayerWinnerContextProvider>
+            </SocketContext>
+          </ActiveTabContextProvider>
         </AnimationContextProvider>
       </HeaderContextProvider>
     </SwrConfig>

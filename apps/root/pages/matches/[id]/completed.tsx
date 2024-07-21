@@ -16,6 +16,7 @@ export default function Completed({
     frames: {
       firstBreak?: string;
       frameData: Frame[];
+      gameType?: string;
       teams: {
         home: any;
         away: any;
@@ -81,6 +82,7 @@ export default function Completed({
         currentMatch={fallback?.match}
         framePage={framePage}
         setFramePage={setFramePage}
+        gameType={fallback?.frames?.gameType}
         completed
       />
     </>

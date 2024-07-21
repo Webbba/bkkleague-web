@@ -10,10 +10,11 @@ export default function Completed({
   framePage,
   setFramePage,
   playing,
+  gameType,
 }: {
   frames?: {
     firstBreak?: string;
-    frameData: Frame[];
+    frameData?: Frame[];
     teams?: {
       home: any;
       away: any;
@@ -22,11 +23,12 @@ export default function Completed({
   framePage?: number;
   setFramePage?: (data: number) => void;
   playing?: boolean;
+  gameType?: string;
 }) {
   const [currentFrames, setCurrentFrames] = useState<Frame[]>([]);
 
   useEffect(() => {
-    if (frames && framePage !== undefined) {
+    if (frames && framePage !== undefined && frames.frameData) {
       setCurrentFrames(
         frames?.frameData?.slice(
           framePage * 4,
@@ -51,6 +53,12 @@ export default function Completed({
   const awayLogo = frames?.teams?.away.logo
     ? `${process.env.NEXT_PUBLIC_API_URL}/logos/${frames?.teams?.away.logo}`
     : '';
+
+  let lastPage = 4;
+
+  if (gameType === '9b') {
+    lastPage = 6;
+  }
 
   return (
     <>
@@ -112,14 +120,14 @@ export default function Completed({
           let currentFrame;
 
           if (
-            currentFrames.find(
+            frames?.frameData?.find(
               (frame) =>
                 frame.frameNumber === item.frameNumber - 1 && frame.winner,
             ) &&
             !item.winner
           ) {
             currentFrame = index;
-          } else if (!item.winner) {
+          } else if (!item.winner && framePage === 0) {
             currentFrame = 0;
           }
 
@@ -154,7 +162,7 @@ export default function Completed({
           <div className={cn.pageTextWrapper}>Previous page</div>
         </button>
         <div className={cn.framePages}>
-          {`${framePage === 0 ? 1 : (framePage as number) * 4} - ${(framePage as number) * 4 + 4} from 20`}
+          {`${framePage === 0 ? 1 : (framePage as number) * 4 + 1} - ${(framePage as number) === lastPage ? frames?.frameData?.length : (framePage as number) * 4 + 4} from ${frames?.frameData?.length}`}
         </div>
         <button
           type="button"
@@ -163,7 +171,7 @@ export default function Completed({
             setFramePage && setFramePage((framePage as number) + 1)
           }
           disabled={
-            framePage === 4 ||
+            framePage === lastPage ||
             !frames?.frameData?.slice((framePage as number) * 4 + 4).length
           }
         >

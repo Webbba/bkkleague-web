@@ -18,7 +18,7 @@ export default function Waiting({
   homeTeamBestPlayer?: BestPlayer;
   missed?: boolean;
   frames?: {
-    frameData: Frame[];
+    frameData?: Frame[];
     teams?: {
       home: any;
       away: any;
