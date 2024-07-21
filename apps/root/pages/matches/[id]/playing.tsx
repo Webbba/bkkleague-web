@@ -230,6 +230,10 @@ export default function Playing({
             payloadFrameIndex = payload.frameIdx - 4;
           }
 
+          if (payload.frameIdx > 23) {
+            payloadFrameIndex = payload.frameIdx - 5;
+          }
+
           const prevFrame = nextFramesData.find(
             (item) => item.frameNumber === payloadFrameIndex,
           );
@@ -400,12 +404,16 @@ export default function Playing({
           payloadFrameIndex = payload.frameIdx - 2;
         }
 
-        if (payload.frameIdx > 12) {
+        if (payload.frameIdx > 13) {
           payloadFrameIndex = payload.frameIdx - 3;
         }
 
         if (payload.frameIdx > 18) {
           payloadFrameIndex = payload.frameIdx - 4;
+        }
+
+        if (payload.frameIdx > 23) {
+          payloadFrameIndex = payload.frameIdx - 5;
         }
 
         const nextFrames: any = { ...frames };
@@ -520,6 +528,8 @@ export default function Playing({
           setFramePage(3);
         } else if (payloadFrameIndex + 1 === 16) {
           setFramePage(4);
+        } else if (payloadFrameIndex + 1 === 20) {
+          setFramePage(5);
         }
       }
     }
