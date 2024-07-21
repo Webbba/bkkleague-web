@@ -422,28 +422,32 @@ export default function Playing({
 
           if (result.frameNumber === payloadFrameIndex + 1) {
             const side =
-              query.homeTeam === payload.winnerTeamId.toString()
+              query.homeTeam === payload?.winnerTeamId?.toString()
                 ? 'home'
                 : 'away';
 
             result.winner = {
               side: side,
-              teamId: payload.winnerTeamId,
+              teamId: payload?.winnerTeamId,
             };
 
             let playerName = '';
             let secondPlayerName = '';
 
             if (side === 'home') {
-              playerName = result?.players?.home[0]?.nickname;
+              if (result?.players?.home && result?.players?.home[0]) {
+                playerName = result?.players?.home[0]?.nickname;
+              }
 
-              if (result?.players?.home[0]) {
+              if (result?.players?.home && result?.players?.home[1]) {
                 secondPlayerName = result?.players?.home[1]?.nickname;
               }
             } else {
-              playerName = result?.players?.away[0]?.nickname;
+              if (result?.players?.away && result?.players?.away[0]) {
+                playerName = result?.players?.away[0]?.nickname;
+              }
 
-              if (result?.players?.away[0]) {
+              if (result?.players?.away && result?.players?.away[1]) {
                 secondPlayerName = result?.players?.away[1]?.nickname;
               }
             }
