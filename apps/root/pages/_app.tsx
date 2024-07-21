@@ -187,14 +187,6 @@ function AppContent({ Component, pageProps }: AppProps) {
         if (setWinnerTeam) {
           setWinnerTeam({ name: '', logo: '' });
         }
-
-        if (setAnimationRequested) {
-          setAnimationRequested(true);
-        }
-
-        setTimeout(() => {
-          push('/upcoming');
-        }, 1500);
       }, 60500);
     }
   }, [teamWinPopupVisible]);
