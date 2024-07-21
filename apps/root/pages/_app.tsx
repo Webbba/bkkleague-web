@@ -61,7 +61,7 @@ function AppContent({ Component, pageProps }: AppProps) {
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
     {
       share: true,
-      shouldReconnect: () => false,
+      shouldReconnect: () => true,
       onOpen: () => {
         if (setIsConnected) {
           setIsConnected(true);

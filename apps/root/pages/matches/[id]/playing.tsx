@@ -66,7 +66,7 @@ export default function Playing({
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
     {
       share: true,
-      shouldReconnect: () => false,
+      shouldReconnect: () => true,
       onOpen: () => {
         if (setSubscribedMatches) {
           setSubscribedMatches([Number(query.id) as number]);

@@ -34,7 +34,7 @@ export default function Root({
     `${process.env.NEXT_PUBLIC_WSS_URL}`,
     {
       share: true,
-      shouldReconnect: () => false,
+      shouldReconnect: () => true,
       onOpen: () => {
         const todayMatches = fallback?.upcomingMatches?.filter((item) => {
           const date = new Date(item.date);
