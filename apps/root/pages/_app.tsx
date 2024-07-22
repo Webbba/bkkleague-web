@@ -209,19 +209,19 @@ function AppContent({ Component, pageProps }: AppProps) {
   }, [playerWinPopupVisible]);
 
   useEffect(() => {
-    if (showPlayerWinner) {
+    if (showPlayerWinner && !showTeamWinner) {
       setPhraseNumber(getRandomInt());
       setPlayerWinPopupVisible(true);
       frame();
     }
-  }, [showPlayerWinner]);
+  }, [showPlayerWinner, showTeamWinner]);
 
   useEffect(() => {
     if (showTeamWinner) {
       setTeamWinPopupVisible(true);
       teamFrame();
     }
-  }, [showPlayerWinner]);
+  }, [showTeamWinner]);
 
   return (
     <div className="wrapper" id="wrapper">

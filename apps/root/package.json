@@ -21,7 +21,6 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.8",
     "react-use-websocket": "^4.8.1",
-    "socket.io-client": "^4.7.5",
     "swr": "^2.1.0",
     "upcoming-matches": "*"
   },

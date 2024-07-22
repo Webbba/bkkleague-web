@@ -154,9 +154,12 @@ export default function Root({
       );
 
       const todayMatches = fallback?.upcomingMatches?.filter((item) => {
-        const date = new Date(item.date);
+        const dateOffset = new Date(item.date).getTimezoneOffset();
+        const dateUTC = new Date(item.date).getTime() + dateOffset * 60 * 1000;
+        const dateICT = dateUTC + 7 * 60 * 68 * 1000;
+
         return (
-          new Date(date).toLocaleDateString() ===
+          new Date(dateICT).toLocaleDateString() ===
           new Date().toLocaleDateString()
         );
       });
@@ -186,9 +189,12 @@ export default function Root({
       );
 
       const todayMatches = fallback?.upcomingMatches?.filter((item) => {
-        const date = new Date(item.date);
+        const dateOffset = new Date(item.date).getTimezoneOffset();
+        const dateUTC = new Date(item.date).getTime() + dateOffset * 60 * 1000;
+        const dateICT = dateUTC + 7 * 60 * 68 * 1000;
+
         return (
-          new Date(date).toLocaleDateString() ===
+          new Date(dateICT).toLocaleDateString() ===
           new Date().toLocaleDateString()
         );
       });

@@ -5,7 +5,13 @@ export const TeamWinnerContext = createContext<{
   setShowTeamWinner?: (data: boolean | null) => void;
   winnerTeam: { logo: string; name: string } | null;
   setWinnerTeam?: (data: { logo: string; name: string } | null) => void;
-}>({ showTeamWinner: false, winnerTeam: { logo: '', name: '' } });
+  doNotShowAgain: number[] | null;
+  setDoNotShowAgain?: (data: number[] | null) => void;
+}>({
+  showTeamWinner: false,
+  winnerTeam: { logo: '', name: '' },
+  doNotShowAgain: [],
+});
 
 export default function WinnerCtxProvider({
   children,
@@ -13,6 +19,7 @@ export default function WinnerCtxProvider({
   children: JSX.Element;
 }) {
   const [showTeamWinner, setShowTeamWinner] = useState<boolean | null>(false);
+  const [doNotShowAgain, setDoNotShowAgain] = useState<number[] | null>([]);
   const [winnerTeam, setWinnerTeam] = useState<{
     logo: string;
     name: string;
@@ -24,8 +31,17 @@ export default function WinnerCtxProvider({
       setShowTeamWinner,
       winnerTeam,
       setWinnerTeam,
+      doNotShowAgain,
+      setDoNotShowAgain,
     }),
-    [showTeamWinner, setShowTeamWinner, winnerTeam, winnerTeam],
+    [
+      showTeamWinner,
+      winnerTeam,
+      doNotShowAgain,
+      setShowTeamWinner,
+      setWinnerTeam,
+      setDoNotShowAgain,
+    ],
   );
 
   return (
