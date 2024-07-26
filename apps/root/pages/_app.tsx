@@ -114,56 +114,56 @@ function AppContent({ Component, pageProps }: AppProps) {
 
   const colors = ['#bb0000', '#ffffff'];
 
-  const end = Date.now() + 10 * 1000;
-  const teamEnd = Date.now() + 60 * 1000;
+  // const end = Date.now() + 10 * 1000;
+  // const teamEnd = Date.now() + 60 * 1000;
 
-  const frame = () => {
-    //@ts-ignore
-    confetti({
-      particleCount: 2,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0 },
-      colors: colors,
-    });
+  // const frame = () => {
+  //   //@ts-ignore
+  //   confetti({
+  //     particleCount: 2,
+  //     angle: 60,
+  //     spread: 55,
+  //     origin: { x: 0 },
+  //     colors: colors,
+  //   });
 
-    //@ts-ignore
-    confetti({
-      particleCount: 2,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1 },
-      colors: colors,
-    });
+  //   //@ts-ignore
+  //   confetti({
+  //     particleCount: 2,
+  //     angle: 120,
+  //     spread: 55,
+  //     origin: { x: 1 },
+  //     colors: colors,
+  //   });
 
-    if (Date.now() < end) {
-      requestAnimationFrame(frame);
-    }
-  };
+  //   if (Date.now() < end) {
+  //     requestAnimationFrame(frame);
+  //   }
+  // };
 
-  const teamFrame = () => {
-    //@ts-ignore
-    confetti({
-      particleCount: 2,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0 },
-      colors: colors,
-    });
+  // const teamFrame = () => {
+  //   //@ts-ignore
+  //   confetti({
+  //     particleCount: 2,
+  //     angle: 60,
+  //     spread: 55,
+  //     origin: { x: 0 },
+  //     colors: colors,
+  //   });
 
-    //@ts-ignore
-    confetti({
-      particleCount: 2,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1 },
-      colors: colors,
-    });
+  //   //@ts-ignore
+  //   confetti({
+  //     particleCount: 2,
+  //     angle: 120,
+  //     spread: 55,
+  //     origin: { x: 1 },
+  //     colors: colors,
+  //   });
 
-    if (Date.now() < teamEnd) {
-      requestAnimationFrame(teamFrame);
-    }
-  };
+  //   if (Date.now() < teamEnd) {
+  //     requestAnimationFrame(teamFrame);
+  //   }
+  // };
 
   useEffect(() => {
     getSeasonAction();
@@ -212,14 +212,14 @@ function AppContent({ Component, pageProps }: AppProps) {
     if (showPlayerWinner && !showTeamWinner) {
       setPhraseNumber(getRandomInt());
       setPlayerWinPopupVisible(true);
-      frame();
+      // frame();
     }
   }, [showPlayerWinner, showTeamWinner]);
 
   useEffect(() => {
     if (showTeamWinner) {
       setTeamWinPopupVisible(true);
-      teamFrame();
+      // teamFrame();
     }
   }, [showTeamWinner]);
 

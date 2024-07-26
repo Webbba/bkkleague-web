@@ -31,7 +31,9 @@ export default function FrameItem({
             <IconStar />
           )}
         </div>
-        <div className={cn.playersWrapper}>
+        <div
+          className={`${cn.playersWrapper} ${frame?.players?.home && frame?.players?.home?.length === 1 ? cn.bigFontSize : ''}  ${frame?.players?.home && frame?.players?.home?.length > 1 ? cn.whiteSpace : ''}`}
+        >
           <span>
             {frame?.players?.home
               ?.map((item) => item?.nickname || 'Guest')
@@ -59,7 +61,9 @@ export default function FrameItem({
             <IconStar />
           )}
         </div>
-        <div className={cn.playersWrapper}>
+        <div
+          className={`${cn.playersWrapper} ${frame?.players?.away && frame?.players?.away?.length === 1 ? cn.bigFontSize : ''} ${frame?.players?.away && frame?.players?.away?.length > 1 ? cn.whiteSpace : ''}`}
+        >
           <span>
             {frame?.players?.away
               ?.map((item) => item?.nickname || 'Guest')
@@ -77,7 +81,9 @@ export default function FrameItem({
             </div>
           </div>
         )}
-        {!frame?.winner && <div className={cn.versus}>S</div>}
+        {!frame?.winner && (
+          <div className={`${cn.versus} ${cn.versusLeft}`}>S</div>
+        )}
       </div>
     </div>
   );
