@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Frame } from '../../../types';
 import FrameItem from './frame-item';
 import IconArrowLeft from '../../icons/arrow-left';
+import IconAchivment from '../../icons/achivment';
+import IconMedal from '../../icons/medal';
 
 import cn from './match.module.css';
 
@@ -26,6 +28,7 @@ export default function Completed({
   gameType?: string;
 }) {
   const [currentFrames, setCurrentFrames] = useState<Frame[]>([]);
+  const [winnerTeam, setWinnerTeam] = useState('');
 
   useEffect(() => {
     if (frames && framePage !== undefined && frames.frameData) {
@@ -60,6 +63,29 @@ export default function Completed({
     lastPage = 6;
   }
 
+  useEffect(() => {
+    let playerWinForTeamWin = 11;
+
+    if (gameType === '9b') {
+      playerWinForTeamWin = 14;
+    }
+
+    const awayWinnerScore = frames?.frameData?.filter(
+      (frame: any) => frame?.winner?.side === 'away',
+    );
+    const homeWinnerScore = frames?.frameData?.filter(
+      (frame: any) => frame?.winner?.side === 'home',
+    );
+
+    if (homeWinnerScore && homeWinnerScore?.length >= playerWinForTeamWin) {
+      setWinnerTeam('home');
+    }
+
+    if (awayWinnerScore && awayWinnerScore?.length >= playerWinForTeamWin) {
+      setWinnerTeam('away');
+    }
+  }, [gameType, frames]);
+
   return (
     <>
       <div className={`${cn.matchTeams} ${cn.completedMatchTeams}`}>
@@ -80,6 +106,11 @@ export default function Completed({
             </div>
           ) : (
             <div className={cn.teamLogoWrapper}>
+              {winnerTeam === 'home' && (
+                <div className={cn.winnerWrapper}>
+                  <IconMedal />
+                </div>
+              )}
               <img
                 className={cn.teamLogo}
                 src={homeLogo as string}
@@ -87,7 +118,12 @@ export default function Completed({
               />
             </div>
           )}
-          <div className={cn.frames}>{homeFrames}</div>
+          <div className={cn.frames}>
+            {`${homeFrames < 10 ? '0' : ''}${homeFrames}`}
+          </div>
+        </div>
+        <div className={cn.framesSeparator}>
+          <div />
         </div>
         <div className={cn.awayTeam}>
           {homeLogo === awayLogo || !awayLogo ? (
@@ -105,6 +141,11 @@ export default function Completed({
             </div>
           ) : (
             <div className={cn.teamLogoWrapper}>
+              {winnerTeam === 'away' && (
+                <div className={cn.winnerWrapper}>
+                  <IconMedal />
+                </div>
+              )}
               <img
                 className={cn.teamLogo}
                 src={awayLogo as string}
@@ -112,7 +153,9 @@ export default function Completed({
               />
             </div>
           )}
-          <div className={cn.frames}>{awayFrames}</div>
+          <div className={cn.frames}>
+            {`${awayFrames < 10 ? '0' : ''}${awayFrames}`}
+          </div>
         </div>
       </div>
       <div className={cn.framesWrapper}>

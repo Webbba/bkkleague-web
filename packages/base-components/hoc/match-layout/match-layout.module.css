@@ -6,13 +6,13 @@
 }
 
 .match-header {
-  height: 12vh;
+  height: 6vh;
   box-sizing: border-box;
   color: #fff;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 4vh;
+  padding: 0 2vh;
   position: relative;
 
   &.with-border {
@@ -28,6 +28,10 @@
   top: 0;
   height: 100%;
 
+  & svg {
+    height: 80%;
+  }
+
   &.home-winner {
     left: 20%;
   }
@@ -38,8 +42,8 @@
 }
 
 .fullscreen-button svg {
-  width: 9vh;
-  height: 9vh;
+  width: 4vh;
+  height: 4vh;
 
   & path {
     stroke: #171818;
@@ -47,8 +51,8 @@
 }
 
 .back-button svg {
-  width: 9vh;
-  height: 9vh;
+  width: 4vh;
+  height: 4vh;
 }
 
 .match-header-title {
@@ -56,7 +60,7 @@
   flex-direction: column;
   justify-content: center;
   color: #000;
-  font-size: 9vh;
+  font-size: 5vh;
   font-weight: bold;
   line-height: 84px;
   text-transform: uppercase;

@@ -19,6 +19,8 @@ const defaultFramesData = {
   firstBreak: '',
 };
 
+let timeout: NodeJS.Timeout;
+
 export default function Playing({
   fallback,
 }: {
@@ -47,6 +49,7 @@ export default function Playing({
       }
     | undefined
   >(defaultFramesData);
+  const [queuedPayloads, setQueuedPayloads] = useState<any[]>([]);
 
   const { query } = useRouter();
   const { setShowPlayerWinner, setWinnerName } =
@@ -240,9 +243,19 @@ export default function Playing({
       );
 
       if (payload.type === 'players') {
+        let nextQueuedPayloads = ([] as any[]).concat(queuedPayloads);
+
         const playerResponse = await getPlayer(payload.playerId);
 
         if (playerResponse) {
+          clearTimeout(timeout);
+
+          nextQueuedPayloads = nextQueuedPayloads.filter(
+            (item, index) => item.id !== `${payload.playerId}-${index + 1}`,
+          );
+
+          setQueuedPayloads(nextQueuedPayloads);
+
           const name = playerResponse.res.name;
 
           const player = {
@@ -424,11 +437,31 @@ export default function Playing({
   );
 
   useEffect(() => {
+    if (queuedPayloads && queuedPayloads.length) {
+      queuedPayloads.forEach((payload) => {
+        timeout = setTimeout(() => {
+          getFrame(payload);
+        }, 100);
+      });
+    }
+  }, [queuedPayloads]);
+
+  useEffect(() => {
     if (lastMessage.type === 'frame_update') {
       const payload: any = lastMessage.payload;
 
       if (payload.type === 'players') {
-        getFrame(payload);
+        const nextQueuedPayloads = ([] as any[]).concat(queuedPayloads);
+
+        const saveTimeout = setTimeout(() => {
+          nextQueuedPayloads.push({
+            id: `${payload.playerId}-${nextQueuedPayloads.length + 1}`,
+            ...payload,
+          });
+
+          setQueuedPayloads(nextQueuedPayloads);
+          clearTimeout(saveTimeout);
+        }, 100);
       }
 
       if (payload.type === 'win') {

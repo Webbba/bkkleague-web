@@ -9,7 +9,7 @@
 .header {
   width: 100vw;
   height: 12vh;
-  background: linear-gradient(90deg, #9626E8 0%, #FF0565 50%, #FFB600 100%);
+  background: linear-gradient(90deg, #4926e8 0%, #7a2ecf 50%, #0089ff 100%);
   display: flex;
   flex-direction: row;
   justify-content: space-between;

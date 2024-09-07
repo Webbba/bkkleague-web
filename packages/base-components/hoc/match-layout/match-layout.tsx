@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import IconFullScreen from '../icons/fullscreen';
 import IconArrowLeft from '../icons/arrow-left';
 import IconHint from '../icons/hint';
-import IconAchivment from '../icons/achivment';
 import { BestPlayer, Frame, TeamStats } from '../../types';
 import { AnimationContext } from '../../context/animation-context';
 import Waiting from './components/waiting';
@@ -46,7 +45,6 @@ export default function MatchLayout({
 }) {
   const [fullscreen, setFullscreen] = useState(false);
   const router = useRouter();
-  const [winnerTeam, setWinnerTeam] = useState('');
 
   const { setAnimationRequested } = useContext(AnimationContext);
 
@@ -75,43 +73,11 @@ export default function MatchLayout({
     }
   };
 
-  useEffect(() => {
-    if (completed) {
-      let playerWinForTeamWin = 11;
-
-      if (gameType === '9b') {
-        playerWinForTeamWin = 14;
-      }
-
-      const awayWinnerScore = frames?.frameData?.filter(
-        (frame: any) => frame?.winner?.side === 'away',
-      );
-      const homeWinnerScore = frames?.frameData?.filter(
-        (frame: any) => frame?.winner?.side === 'home',
-      );
-
-      if (homeWinnerScore && homeWinnerScore?.length >= playerWinForTeamWin) {
-        setWinnerTeam('home');
-      }
-
-      if (awayWinnerScore && awayWinnerScore?.length >= playerWinForTeamWin) {
-        setWinnerTeam('away');
-      }
-    }
-  }, [gameType, frames, completed]);
-
   return (
     <div className={cn.matchLayout}>
       <div
         className={`${cn.matchHeader} ${!currentMatch ? cn.withBorder : ''}`}
       >
-        {completed && winnerTeam && (
-          <div
-            className={`${winnerTeam === 'home' ? cn.homeWinner : cn.awayWinner} ${cn.iconAchivmentWrapper}`}
-          >
-            <IconAchivment />
-          </div>
-        )}
         <button
           type="button"
           className={cn.backButton}
