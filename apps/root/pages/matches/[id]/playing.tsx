@@ -20,6 +20,7 @@ const defaultFramesData = {
 };
 
 let timeout: NodeJS.Timeout;
+let refreshTimeout: NodeJS.Timeout;
 
 export default function Playing({
   fallback,
@@ -51,7 +52,7 @@ export default function Playing({
   >(defaultFramesData);
   const [queuedPayloads, setQueuedPayloads] = useState<any[]>([]);
 
-  const { query } = useRouter();
+  const { query, reload } = useRouter();
   const { setShowPlayerWinner, setWinnerName } =
     useContext(PlayerWinnerContext);
   const {
@@ -687,6 +688,16 @@ export default function Playing({
       setFramesData(fallback?.frames);
     }
   }, [fallback?.frames]);
+
+  useEffect(() => {
+    refreshTimeout = setInterval(() => {
+      reload();
+    }, 20000);
+
+    return () => {
+      clearTimeout(refreshTimeout);
+    };
+  }, []);
 
   return (
     <>
