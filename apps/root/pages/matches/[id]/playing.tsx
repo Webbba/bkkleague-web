@@ -20,7 +20,7 @@ const defaultFramesData = {
 };
 
 let timeout: NodeJS.Timeout;
-let refreshTimeout: NodeJS.Timeout;
+let timerId: NodeJS.Timeout;
 
 export default function Playing({
   fallback,
@@ -52,7 +52,7 @@ export default function Playing({
   >(defaultFramesData);
   const [queuedPayloads, setQueuedPayloads] = useState<any[]>([]);
 
-  const { query, reload } = useRouter();
+  const { query } = useRouter();
   const { setShowPlayerWinner, setWinnerName } =
     useContext(PlayerWinnerContext);
   const {
@@ -234,6 +234,20 @@ export default function Playing({
       setFramesData(framesResponse.data);
     }
   }, []);
+
+  const onRetry = async (status?: string, withoutWarnings?: boolean) => {
+    await clearTimeout(timerId);
+
+    const { res: framesResponse } = await getFrames(query?.id as string);
+
+    if (framesResponse && framesResponse.data) {
+      setFramesData(framesResponse.data);
+
+      timerId = setTimeout(() => {
+        onRetry();
+      }, 20000);
+    }
+  };
 
   const getFrame = useCallback(
     async (payload: any) => {
@@ -686,18 +700,16 @@ export default function Playing({
   useEffect(() => {
     if (fallback?.frames) {
       setFramesData(fallback?.frames);
-    }
-  }, [fallback?.frames]);
 
-  useEffect(() => {
-    refreshTimeout = setInterval(() => {
-      reload();
-    }, 20000);
+      setTimeout(() => {
+        onRetry();
+      }, 30000);
+    }
 
     return () => {
-      clearTimeout(refreshTimeout);
+      clearTimeout(timerId);
     };
-  }, []);
+  }, [fallback?.frames]);
 
   return (
     <>
