@@ -222,6 +222,10 @@ export default function Playing({
       if (framesLength >= 16) {
         setFramePage(4);
       }
+
+      if (framesLength >= 20) {
+        setFramePage(5);
+      }
     }
 
     setFrames(nextFrames);
